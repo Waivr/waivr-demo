@@ -18,7 +18,7 @@ export default defineConfig({
   },
   base: './waivr-demo',
   build: {
-    outDir: 'dist/waivr-demo',
+    outDir: 'dist',
     rollupOptions: {
       output: {
         assetFileNames: '[name]-[hash][extname]',
