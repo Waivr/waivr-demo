@@ -6,7 +6,7 @@
   "author": "Wavir",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/waivr-demo",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "jest",
     "lint": "eslint src --ext=.js,.jsx,.ts,.tsx",
