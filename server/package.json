@@ -1,0 +1,17 @@
+{
+  "name": "waivr-demo-server",
+  "version": "1.0.0",
+  "description": "Waivr Demo Server",
+  "main": "server.js",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "string-replace-middleware": "^1.0.2"
+  },
+  "scripts": {
+    "start-prod": "node server.js"
+  }
+}
