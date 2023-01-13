@@ -1,22 +1,18 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import DashboardLayout from '../dashboard/layout/DashboardLayout';
-import MerchantRoutes from './merchant/merchantRoutes';
+import DemoLayout from '../demo/layout/DemoLayout';
 import GenericRoutes from './genericRoutes';
 
 const PrivateRoute = () => (
+  <Routes>
+    <Route path="/" element={<Navigate to="/demo" />} />
 
-    <Routes>
-
-        <Route path="/" element={<Navigate to="/app/merchant" />} />
-
-        <Route path="app" element={<DashboardLayout />}>
-            {GenericRoutes}
-            {MerchantRoutes}
-        </Route>
-        <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+    <Route path="demo" element={<DemoLayout />}>
+      {GenericRoutes}
+    </Route>
+    <Route path="*" element={<Navigate to="/" />} />
+  </Routes>
 );
 
-const AppRoutes = () => (<PrivateRoute />);
+const AppRoutes = () => <PrivateRoute />;
 
 export default AppRoutes;
