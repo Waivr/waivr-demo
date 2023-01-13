@@ -9,24 +9,17 @@ import AppTheme from './components/common/global/AppTheme';
 import AppRoutes from './components/routes/app.routes';
 
 const App = () => (
-
-        <>
-            <BrowserRouter
-                basename={EnvironmentVars.publicUrl}
-            >
-                <ThemeProvider theme={AppTheme}>
-                    <AppGlobalStyles />
-                    <StrictMode>
-                        <AppRoutes />
-                    </StrictMode>
-                </ThemeProvider>
-            </BrowserRouter>
-            <ToastContainer
-                position="top-center"
-            />
-        </>
-
-
-    );
+    <>
+        <BrowserRouter basename={EnvironmentVars.publicUrl}>
+            <ThemeProvider theme={AppTheme}>
+                <AppGlobalStyles />
+                <StrictMode>
+                    <AppRoutes />
+                </StrictMode>
+            </ThemeProvider>
+        </BrowserRouter>
+        <ToastContainer position="top-center" />
+    </>
+);
 
 export default App;

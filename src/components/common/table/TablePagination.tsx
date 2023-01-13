@@ -22,46 +22,36 @@ interface TablePaginationActionsProps {
     rowsPerPage: number;
     onPageChange: (
         event: React.MouseEvent<HTMLButtonElement>,
-        newPage: number,
+        newPage: number
     ) => void;
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
-
     const theme = useTheme();
-    const {
-
-        count,
-        page,
-        rowsPerPage,
-        onPageChange,
-
-    } = props;
+    const { count, page, rowsPerPage, onPageChange } = props;
 
     const handleFirstPageButtonClick = (
-        event: React.MouseEvent<HTMLButtonElement>,
+        event: React.MouseEvent<HTMLButtonElement>
     ) => {
-
         onPageChange(event, 0);
-
     };
 
-    const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-
+    const handleBackButtonClick = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
         onPageChange(event, page - 1);
-
     };
 
-    const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-
+    const handleNextButtonClick = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
         onPageChange(event, page + 1);
-
     };
 
-    const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-
+    const handleLastPageButtonClick = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
         onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-
     };
 
     return (
@@ -71,103 +61,118 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
                 disabled={page === 0}
                 aria-label="first page"
             >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                {theme.direction === 'rtl' ? (
+                    <LastPageIcon />
+                ) : (
+                    <FirstPageIcon />
+                )}
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
                 disabled={page === 0}
                 aria-label="previous page"
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                {theme.direction === 'rtl' ? (
+                    <KeyboardArrowRight />
+                ) : (
+                    <KeyboardArrowLeft />
+                )}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                {theme.direction === 'rtl' ? (
+                    <KeyboardArrowLeft />
+                ) : (
+                    <KeyboardArrowRight />
+                )}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                {theme.direction === 'rtl' ? (
+                    <FirstPageIcon />
+                ) : (
+                    <LastPageIcon />
+                )}
             </IconButton>
         </Box>
     );
-
 }
 
 export interface RowHeader {
-    headers: string[]
+    headers: string[];
 }
 
 export interface RowDataItem {
-    columns: string[]
+    columns: string[];
 }
 
 export interface RowData {
-    rows: RowDataItem[]
+    rows: RowDataItem[];
 }
 
 type TablePaginationProps = {
     rowHeaders: RowHeader;
     rowData: RowData;
-}
+};
 
 const renderTableRows = (columns: string[]) => (
-        <TableRow key={columns[0]}>
-            {(columns.slice(0, columns.length))
-                .map((column) => (
-                    <TableCell align="right">{column}</TableCell>
-                ))}
-        </TableRow>
-    );
+    <TableRow key={columns[0]}>
+        {columns.slice(0, columns.length).map((column) => (
+            <TableCell align="right">{column}</TableCell>
+        ))}
+    </TableRow>
+);
 
 const TablePaginationComponent = (props: TablePaginationProps) => {
-
-    const { rowHeaders, rowData: { rows } } = props;
+    const {
+        rowHeaders,
+        rowData: { rows }
+    } = props;
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
-        newPage: number,
+        newPage: number
     ) => {
-
         setPage(newPage);
-    
     };
 
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-    
     };
 
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                 <TableHead>
-                        <TableRow>
-                            {(rowHeaders.headers)
-                                .map((header) => (
-                                    <TableCell align="right">{header}</TableCell>
-                            ))}
-                        </TableRow>
+                    <TableRow>
+                        {rowHeaders.headers.map((header) => (
+                            <TableCell align="right">{header}</TableCell>
+                        ))}
+                    </TableRow>
                 </TableHead>
                 <TableBody>
                     {(rowsPerPage > 0
-                            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : rows
+                        ? rows.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                          )
+                        : rows
                     ).map((row) => renderTableRows(row.columns))}
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
@@ -178,16 +183,21 @@ const TablePaginationComponent = (props: TablePaginationProps) => {
                 <TableFooter>
                     <TableRow>
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            rowsPerPageOptions={[
+                                5,
+                                10,
+                                25,
+                                { label: 'All', value: -1 }
+                            ]}
                             colSpan={3}
                             count={rows.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             SelectProps={{
                                 inputProps: {
-                                    'aria-label': 'rows per page',
+                                    'aria-label': 'rows per page'
                                 },
-                                native: true,
+                                native: true
                             }}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
@@ -198,7 +208,6 @@ const TablePaginationComponent = (props: TablePaginationProps) => {
             </Table>
         </TableContainer>
     );
-    
 };
 
 export default TablePaginationComponent;

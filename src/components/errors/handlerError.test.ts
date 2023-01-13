@@ -68,7 +68,7 @@ describe('handleError', () => {
 
         const axiosResponse = handlerRequestException(conflict);
         expect(axiosResponse)
-            .toEqual('');
+            .toEqual(null);
 
     });
 
