@@ -29,7 +29,6 @@
         "indent": "off",
         "react/jsx-indent": "off",
         "react/jsx-indent-props": "off",
-        "padded-blocks": ["error", "always"],
         "@typescript-eslint/no-explicit-any": ["off"],
         "react/function-component-definition": "off",
 
@@ -55,6 +54,10 @@
         "react/jsx-filename-extension": "off",
         "react/jsx-props-no-spreading": "off",
         "react/react-in-jsx-scope": "off",
-        "react/require-default-props": "off"
+        "react/require-default-props": "off",
+        "implicit-arrow-linebreak": "off",
+        "operator-linebreak": "off",
+        "function-paren-newline": "off",
+        "object-curly-newline": "off"
     }
 }
