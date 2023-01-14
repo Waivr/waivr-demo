@@ -1,21 +1,21 @@
 # waivr-demo
 
-# Local Development
+## Local Development
 
-## Scripts
+### Scripts
 
-### npm run dev
+`npm run dev`
 
 Runs a local webserver using vite at http://localhost:3001/
 
-### npm storybook
+`npm run storybook`
 
 Starts storybook at http://localhost:6006/
 
-### npm test
+`npm test`
 
 Runs all jest unit tests
 
-### npm lint and npm lint:fix
+`npm run lint` and `npm run lint:fix`
 
 Runs eslint on the `src` directory
