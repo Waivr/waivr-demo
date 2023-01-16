@@ -18,6 +18,8 @@ const styles = {
   fontSize: '12px',
   fontWeight: '700',
   fontStyle: 'normal',
+  paddingRight: '25px',
+  paddingLeft: '25px',
 };
 
 export const Button = ({

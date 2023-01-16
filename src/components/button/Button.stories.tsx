@@ -25,3 +25,10 @@ Reset.args = {
   textColor: '#000',
   label: 'Reset',
 };
+
+export const ConfirmPayment = Template.bind({});
+ConfirmPayment.args = {
+  backgroundColor: '#172836',
+  textColor: '#fff',
+  label: 'Confirm Payment',
+};
