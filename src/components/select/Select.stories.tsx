@@ -6,7 +6,7 @@ export default {
   title: 'Components/Select',
   component: Select,
   argTypes: {
-    label: { control: 'string' },
+    label: { name: 'Label' },
   },
 } as ComponentMeta<typeof Select>;
 

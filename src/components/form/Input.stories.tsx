@@ -6,7 +6,7 @@ export default {
   title: 'Components/Input',
   component: Input,
   argTypes: {
-    defaultValue: { control: 'string' },
+    defaultValue: { name: 'Value' },
   },
 } as ComponentMeta<typeof Input>;
 

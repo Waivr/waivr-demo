@@ -6,7 +6,7 @@ export default {
   title: 'Components/PanelHeader',
   component: PanelHeader,
   argTypes: {
-    label: { control: 'string' },
+    label: { name: 'Label' },
   },
 } as ComponentMeta<typeof PanelHeader>;
 
