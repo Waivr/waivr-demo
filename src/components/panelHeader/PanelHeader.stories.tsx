@@ -1,16 +1,18 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Header } from './Header';
+import { PanelHeader } from './PanelHeader';
 
 export default {
-  title: 'Components/Header',
-  component: Header,
+  title: 'Components/PanelHeader',
+  component: PanelHeader,
   argTypes: {
     label: { control: 'string' },
   },
-} as ComponentMeta<typeof Header>;
+} as ComponentMeta<typeof PanelHeader>;
 
-const Template: ComponentStory<typeof Header> = (args) => <Header {...args} />;
+const Template: ComponentStory<typeof PanelHeader> = (args) => (
+  <PanelHeader {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

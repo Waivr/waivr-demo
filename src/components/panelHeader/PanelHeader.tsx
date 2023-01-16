@@ -4,6 +4,6 @@ type Props = {
   label: string;
 };
 
-export const Header = ({ label }: Props) => (
+export const PanelHeader = ({ label }: Props) => (
   <Box sx={{ typography: 'subtitle1' }}>{label}</Box>
 );
