@@ -4,6 +4,7 @@ type Props = {
   label: string;
   backgroundColor: string;
   textColor: string;
+  onClick: (evt: any) => undefined;
 };
 
 const styles = {
@@ -13,10 +14,22 @@ const styles = {
   display: 'inline-block',
   borderRadius: '17.5px',
   textAlign: 'center',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: '700',
+  fontStyle: 'normal',
 };
 
-export const Button = ({ label, backgroundColor, textColor }: Props) => (
-  <Box sx={{ ...styles, bgcolor: backgroundColor, color: textColor }}>
+export const Button = ({
+  label,
+  backgroundColor,
+  textColor,
+  onClick,
+}: Props) => (
+  <Box
+    sx={{ ...styles, bgcolor: backgroundColor, color: textColor }}
+    onClick={onClick}
+  >
     {label}
   </Box>
 );

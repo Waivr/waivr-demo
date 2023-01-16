@@ -16,7 +16,7 @@ export const Default = Template.bind({});
 Default.args = {
   backgroundColor: '#172836',
   textColor: '#fff',
-  label: 'Pay by bank',
+  label: 'Pay by Bank',
 };
 
 export const Reset = Template.bind({});
