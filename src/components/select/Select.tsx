@@ -12,8 +12,10 @@ type Props = {
 };
 
 const styles = {
-  input: { appearance: 'none' },
+  input: { appearance: 'none', width: 0, margin: 0 },
   label: {
+    paddingLeft: '10px',
+    paddingRight: '10px',
     cursor: 'pointer',
     fontSize: '12px',
     lineHeight: '15px',
@@ -34,10 +36,12 @@ const styles = {
   },
 };
 
+// TODO - handle select logic off clicking the label
+
 export const Select = ({ name, options = [] }: Props) => (
   <Box sx={{ ...styles }}>
     {options.map((o: Option) => (
-      <Box>
+      <Box key={o.value}>
         <label className={o.selected ? 'selected' : ''}>{o.label}</label>
         <input type="radio" name={name} value={o.value} checked={o.selected} />
       </Box>
