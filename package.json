@@ -13,7 +13,7 @@
     "lint:fix": "npm run lint --fix",
     "start-prod": "node server/server.js",
     "clean": "rm -rf node_modules",
-    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006",
     "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "@mui/material": "^5.11.4",
     "@mui/system": "^5.11.4",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
+    "@react-theming/storybook-addon": "^1.1.10",
     "@vitejs/plugin-react": "^3.0.0",
     "airbnb": "^0.0.2",
     "axios": "^1.2.1",
