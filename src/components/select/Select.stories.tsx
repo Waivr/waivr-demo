@@ -14,10 +14,15 @@ const Template: ComponentStory<typeof Select> = (args) => <Select {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  label: 'select',
+  name: 'subscription',
+  options: [{ label: '$29.99/month', value: '1', selected: true }],
 };
 
 export const TwoOptions = Template.bind({});
 TwoOptions.args = {
-  label: 'Two options',
+  name: 'subscription',
+  options: [
+    { label: '$29.99/month', value: '1', selected: true },
+    { label: '$19.99/month', value: '2' },
+  ],
 };
