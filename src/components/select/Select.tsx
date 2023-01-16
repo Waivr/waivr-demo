@@ -16,6 +16,7 @@ const styles = {
   label: {
     paddingLeft: '10px',
     paddingRight: '10px',
+    paddingBottom: '5px',
     cursor: 'pointer',
     fontSize: '12px',
     lineHeight: '15px',
