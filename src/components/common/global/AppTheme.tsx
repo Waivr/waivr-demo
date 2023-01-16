@@ -76,11 +76,10 @@ const AppTheme: Theme = createTheme({
     },
     primary: {
       contrastText: '#ffffff',
-      main: '#5664d2',
+      main: '#000',
     },
     text: {
-      primary: '#172b4d',
-      secondary: '#6b778c',
+      primary: '#172836',
     },
   },
   shadows,
@@ -89,6 +88,7 @@ const AppTheme: Theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: () => ({
         fontFamily: ['Inter', 'sans-serif'].join(','),
+        color: '#172836',
       }),
     },
   },

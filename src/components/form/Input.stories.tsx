@@ -6,7 +6,7 @@ export default {
   title: 'Components/Input',
   component: Input,
   argTypes: {
-    label: { control: 'string' },
+    defaultValue: { control: 'string' },
   },
 } as ComponentMeta<typeof Input>;
 
@@ -14,15 +14,17 @@ const Template: ComponentStory<typeof Input> = (args) => <Input {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  label: 'Input',
+  defaultValue: 'John',
 };
 
 export const InvalidInput = Template.bind({});
 InvalidInput.args = {
-  label: 'Invalid input',
+  defaultValue: 'john.snow@northwall',
+  type: 'email',
 };
 
 export const Email = Template.bind({});
 Email.args = {
-  label: 'Email',
+  defaultValue: 'john.snow@northwall.com',
+  type: 'email',
 };
