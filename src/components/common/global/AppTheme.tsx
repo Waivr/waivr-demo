@@ -33,38 +33,18 @@ const shadows: Shadows = [
 
 const typography: Partial<Typography> = {
   fontFamily: ['Inter', 'sans-serif'].join(','),
+  subtitle1: {
+    color: '#172836',
+    fontSize: '12px',
+    lineHeight: '15px',
+    fontWeight: '700',
+    fontStyle: 'normal',
+  },
   h1: {
-    fontWeight: 500,
-    fontSize: 35,
-    letterSpacing: '-0.24px',
-  },
-  h2: {
-    fontWeight: 500,
-    fontSize: 29,
-    letterSpacing: '-0.24px',
-  },
-  h3: {
-    fontWeight: 500,
-    fontSize: 24,
-    letterSpacing: '-0.06px',
-  },
-  h4: {
-    fontWeight: 500,
-    fontSize: 20,
-    letterSpacing: '-0.06px',
-  },
-  h5: {
-    fontWeight: 500,
-    fontSize: 16,
-    letterSpacing: '-0.05px',
-  },
-  h6: {
-    fontWeight: 500,
-    fontSize: 14,
-    letterSpacing: '-0.05px',
-  },
-  overline: {
-    fontWeight: 500,
+    fontWeight: 700,
+    fontSize: '20px',
+    color: '#000',
+    lineHeight: '24px',
   },
 };
 

@@ -6,7 +6,7 @@ export default {
   title: 'Components/Header',
   component: Header,
   argTypes: {
-    label: { control: 'string' },
+    label: { name: 'Label' },
   },
 } as ComponentMeta<typeof Header>;
 
@@ -14,5 +14,5 @@ const Template: ComponentStory<typeof Header> = (args) => <Header {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  label: 'Header',
+  label: 'Recurring Payments Demo',
 };
