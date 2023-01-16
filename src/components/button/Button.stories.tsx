@@ -14,12 +14,14 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  backgroundColor: 'black',
-  label: 'Pay by bank',
+  backgroundColor: '#172836',
+  textColor: '#fff',
+  label: 'Pay by Bank',
 };
 
 export const Reset = Template.bind({});
 Reset.args = {
-  label: 'reset',
-  backgroundColor: 'green',
+  backgroundColor: '#E2FF62',
+  textColor: '#000',
+  label: 'Reset',
 };
