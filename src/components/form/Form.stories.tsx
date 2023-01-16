@@ -13,7 +13,7 @@ export default {
 } as ComponentMeta<typeof Form>;
 
 const Template: ComponentStory<typeof Form> = () => (
-  <Box sx={{ backgroundColor: '#fff' }}>
+  <Box sx={{ backgroundColor: '#fff', padding: '25px' }}>
     <Form>
       <FormRow label="First Name" defaultValue="John" type="text" />
       <FormRow label="Last Name" defaultValue="Snow" type="text" />
