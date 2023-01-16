@@ -33,6 +33,13 @@ const shadows: Shadows = [
 
 const typography: Partial<Typography> = {
   fontFamily: ['Inter', 'sans-serif'].join(','),
+  subtitle1: {
+    color: '#172836',
+    fontSize: '12px',
+    lineHeight: '15px',
+    fontWeight: '700',
+    fontStyle: 'normal',
+  },
   h1: {
     fontWeight: 500,
     fontSize: 35,
