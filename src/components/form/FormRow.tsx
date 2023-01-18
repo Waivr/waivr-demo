@@ -5,15 +5,16 @@ type Props = InputProps & {
   label: string;
 };
 
-const labelStyles = {
-  fontSize: '10px',
-  lineHeight: '12px',
-  verticalAlign: 'bottom',
-  color: '#172836',
-  paddingRight: '15px',
+const styles = {
+  label: {
+    fontSize: '10px',
+    lineHeight: '12px',
+    verticalAlign: 'bottom',
+    color: '#172836',
+    paddingRight: '15px',
+  },
+  cell: { paddingTop: '5px' },
 };
-
-const cellStyle = { paddingTop: '5px' };
 
 // TODO
 /*
@@ -23,12 +24,12 @@ const cellStyle = { paddingTop: '5px' };
 
 export const FormRow = ({ label, defaultValue, type }: Props) => (
   <>
-    <Grid xs={2} sx={{ ...cellStyle }}>
+    <Grid xs={3} sx={{ ...styles.cell }}>
       <Box sx={{ textAlign: 'end' }}>
-        <FormLabel sx={{ ...labelStyles }}>{label}</FormLabel>
+        <FormLabel sx={{ ...styles.label }}>{label}</FormLabel>
       </Box>
     </Grid>
-    <Grid xs={10} sx={{ ...cellStyle }}>
+    <Grid xs={9} sx={{ ...styles.cell }}>
       <Input defaultValue={defaultValue} type={type} />
     </Grid>
   </>
