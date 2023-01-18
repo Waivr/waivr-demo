@@ -7,6 +7,7 @@ import EnvironmentVars from './core/config/EnvironmentVars';
 import AppServiceWorker from './serviceWorker';
 import StorageContentManager from './core/storage/storageContentManager';
 
+// eslint-disable-next-line no-console
 console.log('App started with Env Variables.', EnvironmentVars);
 StorageContentManager.setToken(EnvironmentVars.apiAccessToken);
 

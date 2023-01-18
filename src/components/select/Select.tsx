@@ -12,6 +12,7 @@ type Props = {
 };
 
 const styles = {
+  height: '30px',
   input: { appearance: 'none', width: 0, margin: 0 },
   label: {
     paddingLeft: '10px',

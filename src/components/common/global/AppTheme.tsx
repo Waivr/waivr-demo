@@ -40,6 +40,11 @@ const typography: Partial<Typography> = {
     fontWeight: '700',
     fontStyle: 'normal',
   },
+  body1: {
+    color: '#000',
+    fontSize: '12px',
+    lineHeight: '15px',
+  },
   h1: {
     fontWeight: 700,
     fontSize: '20px',
@@ -51,7 +56,7 @@ const typography: Partial<Typography> = {
 const AppTheme: Theme = createTheme({
   palette: {
     background: {
-      default: '#F4F6F8',
+      default: '#FFFFFF',
       paper: colors.common.white,
     },
     primary: {
