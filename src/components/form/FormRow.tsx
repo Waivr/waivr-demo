@@ -24,12 +24,12 @@ const styles = {
 
 export const FormRow = ({ label, defaultValue, type }: Props) => (
   <>
-    <Grid xs={3} sx={{ ...styles.cell }}>
+    <Grid item xs={3} sx={{ ...styles.cell }}>
       <Box sx={{ textAlign: 'end' }}>
         <FormLabel sx={{ ...styles.label }}>{label}</FormLabel>
       </Box>
     </Grid>
-    <Grid xs={9} sx={{ ...styles.cell }}>
+    <Grid item xs={7} sx={{ ...styles.cell }}>
       <Input defaultValue={defaultValue} type={type} />
     </Grid>
   </>
