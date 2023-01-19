@@ -4,7 +4,7 @@ type Props = {
   label: string;
   backgroundColor: string;
   textColor: string;
-  onClick: (evt: any) => undefined;
+  onClick: (evt: any) => void;
 };
 
 const styles = {

@@ -1,15 +1,9 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import DemoLayout from '../demo/layout/DemoLayout';
-import GenericRoutes from './genericRoutes';
+import { Route, Routes } from 'react-router-dom';
+import Demo from '../demo/Demo';
 
 const PrivateRoute = () => (
   <Routes>
-    <Route path="/" element={<Navigate to="/demo" />} />
-
-    <Route path="demo" element={<DemoLayout />}>
-      {GenericRoutes}
-    </Route>
-    <Route path="*" element={<Navigate to="/" />} />
+    <Route path="*" element={<Demo />} />
   </Routes>
 );
 
