@@ -16,13 +16,19 @@ const Template: ComponentStory<typeof CurlBox> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Customer is created',
+  logs: [
+    {
+      title: 'Customer is created',
+    },
+  ],
 };
 
 export const WithRequest = Template.bind({});
 WithRequest.args = {
-  title: 'Customer is created',
-  request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
+  logs: [
+    {
+      title: 'Customer is created',
+      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
 --header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -32,12 +38,16 @@ WithRequest.args = {
 "lastName": "Snow",
 }
 }'`,
+    },
+  ],
 };
 
 export const WithResponse = Template.bind({});
 WithResponse.args = {
-  title: 'Customer is created',
-  request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
+  logs: [
+    {
+      title: 'Customer is created',
+      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
 --header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -47,7 +57,7 @@ WithResponse.args = {
 "lastName": "Snow",
 }
 }'`,
-  response: `{
+      response: `{
 "uid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
 "createDate": "2022-12-12T19:57:44.438588476Z",
 "updateDate": "2022-12-12T19:57:44.623806274Z",
@@ -61,12 +71,16 @@ WithResponse.args = {
 "city": "North Wall",
 "state": "Winterfell"
 }}`,
+    },
+  ],
 };
 
 export const WithResponseLoading = Template.bind({});
 WithResponseLoading.args = {
-  title: 'Customer is created',
-  request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
+  logs: [
+    {
+      title: 'Customer is created',
+      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
 --header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -76,5 +90,7 @@ WithResponseLoading.args = {
 "lastName": "Snow",
 }
 }'`,
-  isLoading: true,
+      isLoading: true,
+    },
+  ],
 };

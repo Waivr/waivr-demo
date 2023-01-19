@@ -1,10 +1,16 @@
 import { Box } from '@mui/system';
+import { useEffect, useRef } from 'react';
 
-type Props = {
+export interface CurlLog {
+  id?: string;
   title: string;
-  request: string;
-  response: string;
-  isLoading: boolean;
+  request?: string;
+  response?: string;
+  isLoading?: boolean;
+}
+
+export type Props = {
+  logs: Array<CurlLog>;
 };
 
 const styles = {
@@ -37,13 +43,20 @@ const styles = {
     padding: '5px',
     textTransform: 'uppercase',
     fontWeight: '700',
+    scrollMarginTop: '15px',
   },
   request: {
     color: '#E2FF62',
     marginBottom: '20px',
+    pre: {
+      whiteSpace: 'pre-wrap',
+    },
   },
   response: {
     color: '#7377E4',
+    pre: {
+      whiteSpace: 'pre-wrap',
+    },
   },
   loading: {
     fontSize: '30px',
@@ -71,19 +84,50 @@ const styles = {
   },
 };
 
-export const CurlBox = ({ title, request, response, isLoading }: Props) => (
-  <Box sx={{ ...styles.wrapper }}>
-    <Box sx={{ ...styles.title }}>{title}</Box>
-    <Box sx={{ ...styles.request }}>{request}</Box>
-    <Box sx={{ ...styles.response }}>
-      {response != null ? (
-        <pre>
-          {response != null
-            ? JSON.stringify(JSON.parse(response), null, 2)
-            : response}
-        </pre>
-      ) : null}
-      {isLoading ? <Box sx={{ ...styles.loading }} /> : null}
+const tryParseJson = (json: string): string => {
+  let result = '';
+  try {
+    result = JSON.stringify(JSON.parse(json), null, 2);
+  } catch {
+    /* empty */
+  }
+
+  return result;
+};
+
+export const CurlBox = ({ logs }: Props) => {
+  const ref = useRef<null | HTMLDivElement>(null);
+
+  const scroll = () => {
+    if (ref?.current != null) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  useEffect(() => {
+    scroll();
+  });
+
+  return (
+    <Box sx={{ ...styles.wrapper }}>
+      {logs.map((log) => (
+        <>
+          <Box sx={{ ...styles.title }} ref={ref}>
+            {log.title}
+          </Box>
+          <Box sx={{ ...styles.request }}>{log.request}</Box>
+          <Box sx={{ ...styles.response }}>
+            {log.response != null ? (
+              <pre>
+                {log.response != null
+                  ? tryParseJson(log.response)
+                  : log.response}
+              </pre>
+            ) : null}
+            {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
+          </Box>
+        </>
+      ))}
     </Box>
-  </Box>
-);
+  );
+};
