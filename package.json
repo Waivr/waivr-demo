@@ -87,16 +87,13 @@
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "prettier": "^2.8.2",
-    "ts-jest": "^29.0.3"
+    "ts-jest": "^29.0.5"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
   },
   "jest": {
     "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest-setup.ts"
-    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy"
     }
