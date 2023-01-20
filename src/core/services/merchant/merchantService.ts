@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios/index';
+import { AxiosInstance } from 'axios';
 import { ApiAccessToken } from '../../domain/auth/apiAccessToken';
 import RequiredAttributes from '../../paramutils/requiredAttributes';
 import ApiCaller from '../api/apiCaller';
@@ -12,7 +12,6 @@ const search = async (
     searchRequest: MerchantSearchRequest,
     token: ApiAccessToken,
 ): Promise<Page<Merchant>> => {
-
     RequiredAttributes.requireNonNull(searchRequest);
     RequiredAttributes.requireNonNull(token);
 
@@ -27,7 +26,6 @@ const search = async (
             header
         );
     return ApiCaller.caller(callApi, MerchantMapper.fromPage);
-
 };
 
 
@@ -36,13 +34,11 @@ export interface IMerchantService {
 }
 
 const instance = (api: AxiosInstance): IMerchantService => {
-
     RequiredAttributes.requireNonNull(api);
 
     return {
         search: (request: MerchantSearchRequest, token: ApiAccessToken) => search(api, request, token),
     };
-
 };
 
 const MerchantService = {
