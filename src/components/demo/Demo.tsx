@@ -227,6 +227,8 @@ const Demo = () => {
     logs = updateCurlLogs(currentState, logs);
 
     setCurl({ logs });
+    await timeout(1000);
+    setCurrentStep(2);
   };
 
   return (
@@ -280,7 +282,8 @@ const Demo = () => {
                   />
                 </Box>
               </Panel>
-            ) : (
+            ) : null}
+            {currentStep === 1 ? (
               <Panel>
                 <PanelHeader label="Basic Checking (*8230)" />
                 <Box sx={{ typography: 'body1' }}>$29.99/mo</Box>
@@ -294,7 +297,14 @@ const Demo = () => {
                   />
                 </Box>
               </Panel>
-            )}
+            ) : null}
+            {currentStep === 2 ? (
+              <Panel>
+                <Box sx={{ margin: '70px auto', textAlign: 'center' }}>
+                  <PanelHeader label="Payment Successful" />
+                </Box>
+              </Panel>
+            ) : null}
           </Box>
         </Grid>
         <Grid item xs={12} md={5}>
