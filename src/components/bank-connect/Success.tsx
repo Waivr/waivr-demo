@@ -10,20 +10,20 @@ type Props = {
 };
 
 const styles = {
-  padding: '64px 40px 15px 40px',
+  padding: '168px 40px 15px 40px',
   header: {
     fontSize: '26px',
     lineHeight: '30px',
     fontWeight: 700,
     marginTop: '5px',
-    marginBottom: '38px',
+    marginBottom: '20px',
     textAlign: 'center',
     display: 'block',
     color: '#172836',
     '.icon': {
       height: '80px',
       width: '80px',
-      marginBottom: '35px',
+      marginBottom: '24px',
     },
   },
   text: {
