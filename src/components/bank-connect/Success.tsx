@@ -1,29 +1,26 @@
 import { Box } from '@mui/system';
 import { Button } from '../button/Button';
 import HeaderIcon from './assets/success-icon.svg';
-import ShieldIcon from './assets/shield.svg';
-import PrivateIcon from './assets/private.svg';
-import ConnectIcon from './assets/connect.svg';
 
 type Props = {
   onClick: () => void;
 };
 
 const styles = {
-  padding: '64px 40px 15px 40px',
+  padding: '168px 40px 15px 40px',
   header: {
     fontSize: '26px',
     lineHeight: '30px',
     fontWeight: 700,
     marginTop: '5px',
-    marginBottom: '38px',
+    marginBottom: '20px',
     textAlign: 'center',
     display: 'block',
     color: '#172836',
     '.icon': {
       height: '80px',
       width: '80px',
-      marginBottom: '35px',
+      marginBottom: '24px',
     },
   },
   text: {
