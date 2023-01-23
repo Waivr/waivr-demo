@@ -1,9 +1,6 @@
 import { Box } from '@mui/system';
 import { Button } from '../button/Button';
 import HeaderIcon from './assets/success-icon.svg';
-import ShieldIcon from './assets/shield.svg';
-import PrivateIcon from './assets/private.svg';
-import ConnectIcon from './assets/connect.svg';
 
 type Props = {
   onClick: () => void;
