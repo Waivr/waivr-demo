@@ -12,8 +12,13 @@ const styles = {
     height: '608px',
     bgcolor: 'background.paper',
     boxShadow: 24,
-    padding: '64px 40px 15px 40px',
     zIndex: 10,
+    overflowY: 'scroll',
+    'scrollbar-width': 'none',
+    ' -ms-overflow-style': 'none',
+    '::-webkit-scrollbar': {
+      display: 'none',
+    },
   },
   shadow: {
     height: '100vh',

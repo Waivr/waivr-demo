@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { BankConnect } from '../bank-connect/BankConnect';
+import { BankSelect } from '../bank-connect/BankSelect';
 import { Consent } from '../bank-connect/Consent';
 import { Button } from '../button/Button';
 import { CurlBox, Props as CurlProps, CurlLog } from '../curl-box/CurlBox';
@@ -14,6 +15,8 @@ import DemoLayout from './layout/DemoLayout';
 
 const Demo = () => {
   const [openBankConnect, setOpenBankConnect] = React.useState(false);
+  // Manage the bank connect screens
+  const [bankConnectScreen, setBankConnectScreen] = React.useState(0);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [curl, setCurl] = React.useState({
     logs: [
@@ -112,35 +115,38 @@ const Demo = () => {
   };
 
   const handleBankConnect = async () => {
-    setOpenBankConnect(false);
-    // Steps:
-    // 1. Hide bank connect modal
-    // 2. Call api to connect account
-    // 3. Move to confirm step
+    if (bankConnectScreen < 1) {
+      setBankConnectScreen(bankConnectScreen + 1);
+    } else {
+      setOpenBankConnect(false);
+      // Steps:
+      // 1. Hide bank connect modal
+      // 2. Call api to connect account
+      // 3. Move to confirm step
 
-    let { logs } = curl;
+      let { logs } = curl;
 
-    let currentState = {
-      id: '1',
-      response: '',
-      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/connectaccounts/render' \
+      let currentState = {
+        id: '1',
+        response: '',
+        request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/connectaccounts/render' \
 --header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599"
 }'`,
-      title: 'Establishing bank connection...',
-      isLoading: true,
-    };
+        title: 'Establishing bank connection...',
+        isLoading: true,
+      };
 
-    logs.push(currentState);
-    setCurl({ logs });
-    // TODO move logic to api layer and remove simulated delay
-    await timeout(2000);
-    currentState = {
-      ...currentState,
-      isLoading: false,
-      response: `{
+      logs.push(currentState);
+      setCurl({ logs });
+      // TODO move logic to api layer and remove simulated delay
+      await timeout(2000);
+      currentState = {
+        ...currentState,
+        isLoading: false,
+        response: `{
   "type": "PLAID",
   "linkingAccessToken": "link-sandbox-613f419b-f7a0-4410-9a4a-e5c44212f7a1",
   "validUntil": "2022-12-13T00:07:18Z",
@@ -176,15 +182,16 @@ const Demo = () => {
   }
 }
 `,
-      title: 'BANK CONNECTION IS ESTABLISHED',
-    };
+        title: 'BANK CONNECTION IS ESTABLISHED',
+      };
 
-    logs = updateCurlLogs(currentState, logs);
+      logs = updateCurlLogs(currentState, logs);
 
-    setCurl({ logs });
-    await timeout(1000);
-    setCurrentStep(1);
-    // TODO scroll to
+      setCurl({ logs });
+      await timeout(1000);
+      setCurrentStep(1);
+      // TODO scroll to
+    }
   };
 
   const handleConfirmPayment = async () => {
@@ -236,7 +243,12 @@ const Demo = () => {
     <DemoLayout>
       {openBankConnect ? (
         <BankConnect>
-          <Consent onClick={() => handleBankConnect()} />
+          {bankConnectScreen === 0 ? (
+            <Consent onClick={() => handleBankConnect()} />
+          ) : null}
+          {bankConnectScreen === 1 ? (
+            <BankSelect onClick={() => handleBankConnect()} />
+          ) : null}
         </BankConnect>
       ) : null}
       <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
