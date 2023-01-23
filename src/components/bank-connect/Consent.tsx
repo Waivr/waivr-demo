@@ -70,6 +70,7 @@ const styles = {
       fontSize: '11px',
       color: '#7C7C7C',
       fontWeight: '700',
+      textDecoration: 'underline',
     },
   },
   continue: {

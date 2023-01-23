@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { BankConnect } from '../bank-connect/BankConnect';
+import { BankLogin } from '../bank-connect/BankLogin';
 import { BankSelect } from '../bank-connect/BankSelect';
 import { Consent } from '../bank-connect/Consent';
 import { Button } from '../button/Button';
@@ -115,7 +116,7 @@ const Demo = () => {
   };
 
   const handleBankConnect = async () => {
-    if (bankConnectScreen < 1) {
+    if (bankConnectScreen < 2) {
       setBankConnectScreen(bankConnectScreen + 1);
     } else {
       setOpenBankConnect(false);
@@ -249,6 +250,9 @@ const Demo = () => {
           ) : null}
           {bankConnectScreen === 1 ? (
             <BankSelect onClick={() => handleBankConnect()} />
+          ) : null}
+          {bankConnectScreen === 2 ? (
+            <BankLogin onClick={() => handleBankConnect()} />
           ) : null}
         </BankConnect>
       ) : null}
