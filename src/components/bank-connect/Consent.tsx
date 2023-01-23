@@ -1,15 +1,16 @@
 import { Box } from '@mui/system';
 import { Button } from '../button/Button';
-import HeaderIcon from './header-icon.svg';
-import ShieldIcon from './shield.svg';
-import PrivateIcon from './private.svg';
-import ConnectIcon from './connect.svg';
+import HeaderIcon from './assets/header-icon.svg';
+import ShieldIcon from './assets/shield.svg';
+import PrivateIcon from './assets/private.svg';
+import ConnectIcon from './assets/connect.svg';
 
 type Props = {
   onClick: () => void;
 };
 
 const styles = {
+  padding: '64px 40px 15px 40px',
   header: {
     textAlign: 'center',
     display: 'block',
@@ -34,7 +35,7 @@ const styles = {
     color: '#172836',
     display: 'grid',
     gridTemplateColumns: 'repeat(12, 1fr)',
-    marginBottom: '10px',
+    marginBottom: '15px',
     icon: {
       'grid-column-start': '1',
       'grid-column-end': '1',
@@ -78,7 +79,7 @@ const styles = {
 };
 
 export const Consent = ({ onClick }: Props) => (
-  <Box>
+  <Box sx={{ ...styles }}>
     <Box sx={{ ...styles.header }}>
       <img className="icon" src={HeaderIcon} alt="bank pay" />
       <Box>Connect your account to</Box>
