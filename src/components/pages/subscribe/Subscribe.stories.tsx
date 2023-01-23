@@ -60,12 +60,7 @@ const SubscribeTemplate: ComponentStory<typeof Subscribe> = (args) => (
       </Grid>
 
       <Grid item xs={12} md={6}>
-        <CurlBox
-          isLoading={false}
-          title={WithResponse.args?.title || ''}
-          request={WithResponse.args?.request || ''}
-          response={WithResponse.args?.response || ''}
-        />
+        <CurlBox logs={WithResponse.args?.logs || []} />
       </Grid>
     </Grid>
 
