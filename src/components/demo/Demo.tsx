@@ -1,21 +1,27 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import { AccountSelection } from '../bank-connect/AccountSelection';
 import { BankConnect } from '../bank-connect/BankConnect';
 import { BankLogin } from '../bank-connect/BankLogin';
 import { BankSelect } from '../bank-connect/BankSelect';
 import { Consent } from '../bank-connect/Consent';
+import { Success } from '../bank-connect/Success';
 import { Button } from '../button/Button';
 import { CurlBox, Props as CurlProps, CurlLog } from '../curl-box/CurlBox';
 import { Form } from '../form/Form';
 import { FormRow } from '../form/FormRow';
 import { Panel } from '../panel/Panel';
 import { PanelHeader } from '../panel/PanelHeader';
-import { Select } from '../select/Select';
+import { Select, Option } from '../select/Select';
 import DemoLayout from './layout/DemoLayout';
 
 const Demo = () => {
   const [openBankConnect, setOpenBankConnect] = React.useState(false);
+  const [subscriptions, setSubscriptions] = React.useState([
+    { label: '$29.99/month', value: '1', selected: true },
+    { label: '$19.99/month', value: '2' },
+  ]);
   // Manage the bank connect screens
   const [bankConnectScreen, setBankConnectScreen] = React.useState(0);
   const [currentStep, setCurrentStep] = React.useState(0);
@@ -43,6 +49,19 @@ const Demo = () => {
         },
       ],
     });
+  };
+
+  const handleSubscriptionSelect = (selectedOption: Option) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const item of subscriptions) {
+      if (item.value === selectedOption.value) {
+        item.selected = true;
+      } else {
+        item.selected = false;
+      }
+    }
+
+    setSubscriptions([...subscriptions]);
   };
 
   const updateCurlLogs = (log: CurlLog, logs: CurlLog[]): CurlLog[] => {
@@ -116,7 +135,7 @@ const Demo = () => {
   };
 
   const handleBankConnect = async () => {
-    if (bankConnectScreen < 2) {
+    if (bankConnectScreen < 4) {
       setBankConnectScreen(bankConnectScreen + 1);
     } else {
       setOpenBankConnect(false);
@@ -254,6 +273,12 @@ const Demo = () => {
           {bankConnectScreen === 2 ? (
             <BankLogin onClick={() => handleBankConnect()} />
           ) : null}
+          {bankConnectScreen === 3 ? (
+            <AccountSelection onClick={() => handleBankConnect()} />
+          ) : null}
+          {bankConnectScreen === 4 ? (
+            <Success onClick={() => handleBankConnect()} />
+          ) : null}
         </BankConnect>
       ) : null}
       <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
@@ -287,10 +312,8 @@ const Demo = () => {
                 <Box sx={{ marginTop: '15px', textAlign: 'center' }}>
                   <Select
                     name="subscription"
-                    options={[
-                      { label: '$29.99/month', value: '1', selected: true },
-                      { label: '$19.99/month', value: '2' },
-                    ]}
+                    options={subscriptions}
+                    onSelect={(option) => handleSubscriptionSelect(option)}
                   />
                 </Box>
                 <Box sx={{ marginTop: '37px', textAlign: 'center' }}>
