@@ -28,7 +28,7 @@ const styles = {
     },
   },
   form: {
-    marginTop: '50px',
+    marginTop: '100px',
     backgroundColor: '#fff',
     padding: '20px',
     border: 'solid 1 #fff',
@@ -48,7 +48,7 @@ const styles = {
   },
   faceId: {
     position: 'fixed',
-    top: '150px',
+    top: '200px',
     left: '113px',
     border: 'solid 1px #fff',
     borderRadius: '15px',
