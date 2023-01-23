@@ -13,6 +13,7 @@ const styles = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     padding: '64px 40px 15px 40px',
+    zIndex: 10,
   },
   shadow: {
     height: '100vh',
