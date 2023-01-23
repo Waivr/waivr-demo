@@ -119,6 +119,7 @@ const Demo = () => {
       setBankConnectScreen(bankConnectScreen + 1);
     } else {
       setOpenBankConnect(false);
+      setBankConnectScreen(0);
       // Steps:
       // 1. Hide bank connect modal
       // 2. Call api to connect account
