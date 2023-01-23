@@ -2,6 +2,7 @@ import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { BankConnect } from '../bank-connect/BankConnect';
+import { Consent } from '../bank-connect/Consent';
 import { Button } from '../button/Button';
 import { CurlBox, Props as CurlProps, CurlLog } from '../curl-box/CurlBox';
 import { Form } from '../form/Form';
@@ -234,7 +235,9 @@ const Demo = () => {
   return (
     <DemoLayout>
       {openBankConnect ? (
-        <BankConnect onClick={() => handleBankConnect()} />
+        <BankConnect>
+          <Consent onClick={() => handleBankConnect()} />
+        </BankConnect>
       ) : null}
       <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
         <Grid item xs={12} md={6}>

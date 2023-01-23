@@ -1,9 +1,6 @@
 import { Box } from '@mui/system';
-import { Button } from '../button/Button';
 
-type Props = {
-  onClick: () => void;
-};
+type Props = { children: React.ReactNode };
 
 const styles = {
   wrapper: {
@@ -11,21 +8,11 @@ const styles = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 254,
-    height: 400,
+    width: '360px',
+    height: '608px',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
-  },
-  box: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-    div: {
-      textAlign: 'center',
-      margin: 'auto',
-    },
+    padding: '64px 40px 15px 40px',
   },
   shadow: {
     height: '100vh',
@@ -37,18 +24,9 @@ const styles = {
   },
 };
 
-export const BankConnect = ({ onClick }: Props) => (
+export const BankConnect = ({ children }: Props) => (
   <>
     <Box sx={{ ...styles.shadow }} />
-    <Box sx={{ ...styles.wrapper }}>
-      <Box sx={{ ...styles.box }}>
-        <Button
-          label="Connect"
-          backgroundColor="#172836"
-          onClick={onClick}
-          textColor="#fff"
-        />
-      </Box>
-    </Box>
+    <Box sx={{ ...styles.wrapper }}>{children}</Box>
   </>
 );
