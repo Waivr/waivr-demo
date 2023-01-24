@@ -386,7 +386,7 @@ const Demo = () => {
 }'`,
       response: '',
       title:
-        'PAYMENT IS AUTO GENERATED ON BILLING ATE WHEN BALANCE IS SUFFICIENT',
+        'PAYMENT IS AUTO GENERATED ON BILLING DATE WHEN BALANCE IS SUFFICIENT',
     };
 
     logs.push(paymentLog);
@@ -408,27 +408,27 @@ const Demo = () => {
 
   return (
     <DemoLayout>
-      {openBankConnect ? (
-        <BankConnect>
-          {bankConnectScreen === 0 ? (
-            <Consent onClick={() => handleBankConnect()} />
-          ) : null}
-          {bankConnectScreen === 1 ? (
-            <BankSelect onClick={() => handleBankConnect()} />
-          ) : null}
-          {bankConnectScreen === 2 ? (
-            <BankLogin onClick={() => handleBankConnect()} />
-          ) : null}
-          {bankConnectScreen === 3 ? (
-            <AccountSelection onClick={() => handleBankConnect()} />
-          ) : null}
-          {bankConnectScreen === 4 ? (
-            <Success onClick={() => handleBankConnect()} />
-          ) : null}
-        </BankConnect>
-      ) : null}
       <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
         <Grid item xs={12} md={6}>
+          {openBankConnect ? (
+            <BankConnect>
+              {bankConnectScreen === 0 ? (
+                <Consent onClick={() => handleBankConnect()} />
+              ) : null}
+              {bankConnectScreen === 1 ? (
+                <BankSelect onClick={() => handleBankConnect()} />
+              ) : null}
+              {bankConnectScreen === 2 ? (
+                <BankLogin onClick={() => handleBankConnect()} />
+              ) : null}
+              {bankConnectScreen === 3 ? (
+                <AccountSelection onClick={() => handleBankConnect()} />
+              ) : null}
+              {bankConnectScreen === 4 ? (
+                <Success onClick={() => handleBankConnect()} />
+              ) : null}
+            </BankConnect>
+          ) : null}
           <Box sx={{ marginTop: '55px', marginBottom: '55px' }}>
             {currentStep === 0 ? (
               <Panel>
