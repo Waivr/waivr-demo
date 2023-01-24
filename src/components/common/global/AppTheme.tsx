@@ -74,6 +74,9 @@ const AppTheme: Theme = createTheme({
       styleOverrides: () => ({
         fontFamily: ['Inter', 'sans-serif'].join(','),
         color: '#172836',
+        [AppTheme.breakpoints.down('md')]: {
+          '#root': { padding: '1rem' },
+        },
       }),
     },
   },

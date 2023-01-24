@@ -1,5 +1,6 @@
 import { Box } from '@mui/system';
 import { useEffect, useRef } from 'react';
+import AppTheme from '../common/global/AppTheme';
 
 export interface CurlLog {
   id?: string;
@@ -11,6 +12,7 @@ export interface CurlLog {
 
 export type Props = {
   logs: Array<CurlLog>;
+  autoScroll?: boolean;
 };
 
 const styles = {
@@ -35,6 +37,9 @@ const styles = {
       backgroundColor: '#5E6870',
       borderRadius: '20px',
       border: '3px solid #172836',
+    },
+    [AppTheme.breakpoints.down('md')]: {
+      padding: '20px',
     },
   },
   title: {
@@ -95,11 +100,11 @@ const tryParseJson = (json: string): string => {
   return result;
 };
 
-export const CurlBox = ({ logs }: Props) => {
+export const CurlBox = ({ logs, autoScroll }: Props) => {
   const ref = useRef<null | HTMLDivElement>(null);
 
   const scroll = () => {
-    if (ref?.current != null) {
+    if (ref?.current != null && autoScroll) {
       ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
@@ -115,7 +120,9 @@ export const CurlBox = ({ logs }: Props) => {
           <Box sx={{ ...styles.title }} ref={ref}>
             {log.title}
           </Box>
-          <Box sx={{ ...styles.request }}>{log.request}</Box>
+          <Box sx={{ ...styles.request }}>
+            <pre>{log.request}</pre>
+          </Box>
           <Box sx={{ ...styles.response }}>
             {log.response != null ? (
               <pre>

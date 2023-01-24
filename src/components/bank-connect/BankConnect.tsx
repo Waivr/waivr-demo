@@ -1,4 +1,5 @@
 import { Box } from '@mui/system';
+import AppTheme from '../common/global/AppTheme';
 
 type Props = { children: React.ReactNode };
 
@@ -6,7 +7,7 @@ const styles = {
   wrapper: {
     position: 'absolute',
     top: '50%',
-    left: '50%',
+    left: '30%',
     transform: 'translate(-50%, -50%)',
     width: '360px',
     height: '608px',
@@ -18,6 +19,11 @@ const styles = {
     ' -ms-overflow-style': 'none',
     '::-webkit-scrollbar': {
       display: 'none',
+    },
+    [AppTheme.breakpoints.down('md')]: {
+      width: '100vw',
+      height: '100vh',
+      left: '50%',
     },
   },
   shadow: {
@@ -32,7 +38,7 @@ const styles = {
 
 export const BankConnect = ({ children }: Props) => (
   <>
-    <Box sx={{ ...styles.shadow }} />
+    {/* <Box sx={{ ...styles.shadow }} /> */}
     <Box sx={{ ...styles.wrapper }}>{children}</Box>
   </>
 );
