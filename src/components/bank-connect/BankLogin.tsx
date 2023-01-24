@@ -1,8 +1,9 @@
 import { TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { Button } from '../button/Button';
+import Lottie from 'lottie-react';
+import faceIdAnimation from './assets/icons8-face-id.json';
 import BankOfWesterosLogo from './assets/bank-of-westeros.png';
-import FaceIDAnimation from './assets/face-id.gif';
 
 type Props = {
   onClick: () => void;
@@ -47,15 +48,17 @@ const styles = {
     },
   },
   faceId: {
+    zIndex: 100,
     position: 'fixed',
     top: '200px',
     left: '113px',
-    border: 'solid 1px #fff',
+    border: 'solid 1px rgba(219,222,226, 1)',
     borderRadius: '15px',
     overflow: 'hidden',
     width: '130px',
-    height: '100px',
-    img: {
+    height: '130px',
+    backgroundColor: 'rgba(219,222,226, 1)',
+    div: {
       width: '100%',
       height: '100%',
     },
@@ -80,7 +83,7 @@ const styles = {
 };
 
 export const BankLogin = ({ onClick }: Props) => {
-  setTimeout(() => onClick(), 6200);
+  setTimeout(() => onClick(), 1000);
   return (
     <Box sx={{ ...styles }}>
       <Box sx={{ ...styles.header }}>
@@ -117,7 +120,7 @@ export const BankLogin = ({ onClick }: Props) => {
         </Box>
       </Box>
       <Box sx={{ ...styles.faceId }}>
-        <img src={FaceIDAnimation} alt="face id" />
+        <Lottie animationData={faceIdAnimation} />
       </Box>
       <Box sx={{ ...styles.register }}>
         <hr />
