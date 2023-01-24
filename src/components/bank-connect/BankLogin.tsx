@@ -109,7 +109,7 @@ export const BankLogin = ({ onClick }: Props) => {
             backgroundColor="#3F7AA8"
             label="Sign In"
             textColor="#fff"
-            onClick={() => undefined}
+            onClick={() => onClick()}
           />
           <Box sx={{ ...styles.form.forgotPw }}>
             Forgot username or password?

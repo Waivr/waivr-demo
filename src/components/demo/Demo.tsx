@@ -40,6 +40,7 @@ const Demo = () => {
 
   const handleReset = () => {
     setOpenBankConnect(false);
+    setBankConnectScreen(0);
     setCurrentStep(0);
     setCurl({
       logs: [
@@ -90,15 +91,15 @@ const Demo = () => {
       id: '0',
       response: '',
       request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
-      --header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-      "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
-      "email": "john.snow@northwall.com",
-      "firstName": "John",
-      "lastName": "Snow",
-      }
-      }'`,
+--header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
+"email": "john.snow@northwall.com",
+"firstName": "John",
+"lastName": "Snow",
+}
+}'`,
       title: 'creating customer...',
       isLoading: true,
     };
@@ -210,6 +211,94 @@ const Demo = () => {
 
       setCurl({ logs });
       await timeout(1000);
+
+      const analysisLog = {
+        request: 'Verifying balance...',
+        title: 'Transactions are analyzed and optimal billing date set',
+        isLoading: true,
+        id: 'transactions',
+      };
+
+      logs.push(analysisLog);
+      setCurl({ logs });
+
+      await timeout(1000);
+      analysisLog.request += '\nAnalyzing cash flows...';
+      logs = updateCurlLogs(analysisLog, logs);
+      setCurl({ logs });
+      await timeout(1000);
+
+      analysisLog.request += '\nSetting optimal billing date...';
+      logs = updateCurlLogs(analysisLog, logs);
+      setCurl({ logs });
+      await timeout(1000);
+
+      analysisLog.isLoading = false;
+      logs = updateCurlLogs(analysisLog, logs);
+      setCurl({ logs });
+
+      let instructions = {
+        response: '',
+        request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/paymentinstructions' \
+--header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+ "externalReferenceIdentifier" : "ancestry.com",
+ "customerUid" : "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
+ "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
+ "amount" : 29.99,
+ "frequency" : {
+   "recurrence" : 1,
+   "cycle" : "MONTHLY"
+ }
+}'`,
+        title: 'Payment instructions generating...',
+        isLoading: true,
+        id: 'instructions',
+      };
+
+      logs.push(instructions);
+      setCurl({ logs });
+
+      await timeout(1000);
+
+      instructions = {
+        ...instructions,
+        isLoading: false,
+        response: `{
+   "uid": "48548386-99fb-4de4-b8f6-513945c944e8",
+   "customerUid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
+   "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
+   "createDate": "2022-12-09T20:42:11.79212Z",
+   "updateDate": "2022-12-09T20:42:11.79212Z",
+   "externalReferenceIdentifier": "ancestry.com",
+   "status": "PENDING",
+   "amount": 29.99,
+   "frequency": {
+       "cycle": "MONTHLY",
+       "recurrence": 1
+   },
+   "nextBillingDate": "2022-01-12T18:00:00Z",
+   "recurringEndDate": null,
+   "enableOptimalBillingDate": true,
+   "metadata": {
+       "optimalBillingDateAnalysis": {
+           "basedNextBillingDate": "2022-01-15T18:00:00Z",
+           "optimalBillingDates": [
+               "2022-02-16T18:00:00Z",
+               "2222-02-17T18:00:00Z",
+               "2222-02-18T18:00:00Z"
+     ]
+       }
+   }
+}
+`,
+        title: 'PAYMENT INSTRUCTION IS GENERATED',
+      };
+
+      logs = updateCurlLogs(instructions, logs);
+      setCurl({ logs });
+
       setCurrentStep(1);
       // TODO scroll to
     }
@@ -251,13 +340,70 @@ const Demo = () => {
       "paymentDate": "2022-01-17T18:00:00Z"
       }
       `,
-      title: 'Payment is initiated',
+      title: 'RECURRING PAYMENT IS INITIATED',
     };
     logs = updateCurlLogs(currentState, logs);
 
     setCurl({ logs });
-    await timeout(1000);
     setCurrentStep(2);
+
+    await timeout(4000);
+
+    const monitoringLog = {
+      id: 'monitoring',
+      request: 'Monitoring balance',
+      response: '',
+      title: 'BALANCE IS MONITORED FOR SUBSEQUENT PAYMENTS',
+    };
+
+    logs.push(monitoringLog);
+    setCurl({ logs });
+
+    monitoringLog.request += '\n1/15 Balance insufficient. Payment on hold.';
+    logs = updateCurlLogs(monitoringLog, logs);
+    setCurl({ logs });
+    await timeout(1000);
+
+    monitoringLog.request += '\n1/16 Balance insufficient. Payment on hold.';
+    logs = updateCurlLogs(monitoringLog, logs);
+    setCurl({ logs });
+    await timeout(1000);
+
+    monitoringLog.request += '\n1/17 Balance sufficient.';
+    logs = updateCurlLogs(monitoringLog, logs);
+    setCurl({ logs });
+    await timeout(1000);
+
+    const paymentLog = {
+      id: 'payment',
+      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/payments/ach' \
+--header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+ "externalReferenceIdentifier": "ancestry.com",
+ "customerUid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
+ "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599"
+}'`,
+      response: '',
+      title:
+        'PAYMENT IS AUTO GENERATED ON BILLING ATE WHEN BALANCE IS SUFFICIENT',
+    };
+
+    logs.push(paymentLog);
+    setCurl({ logs });
+    await timeout(1000);
+
+    paymentLog.response = `{
+   "uid": "834181ee-d39f-424c-950d-623876343885",
+   "createDate": "2023-01-15T20:39:35.067224Z",
+   "updateDate": "2023-01-17T20:39:37.742557719Z",
+   "status": "INITIATED",
+   "amount": 29.990000000000,
+   "paymentDate": "2022-01-17T18:00:00Z"
+}`;
+    logs = updateCurlLogs(paymentLog, logs);
+    setCurl({ logs });
+    await timeout(1000);
   };
 
   return (
@@ -283,7 +429,7 @@ const Demo = () => {
       ) : null}
       <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
         <Grid item xs={12} md={6}>
-          <Box sx={{ marginTop: '55px' }}>
+          <Box sx={{ marginTop: '55px', marginBottom: '55px' }}>
             {currentStep === 0 ? (
               <Panel>
                 <PanelHeader label="Subscriber" />
@@ -350,8 +496,8 @@ const Demo = () => {
             ) : null}
           </Box>
         </Grid>
-        <Grid item xs={12} md={5}>
-          <CurlBox {...curl} />
+        <Grid item xs={12} md={6}>
+          <CurlBox {...curl} autoScroll={!openBankConnect} />
           <Box sx={{ textAlign: 'right', marginTop: '23px' }}>
             <Button
               backgroundColor="#E2FF62"
