@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { Button } from '../button/Button';
 import Lottie from 'lottie-react';
-import faceIdAnimation from './assets/icons8-face-id.json';
+import faceIdAnimation from './assets/31873-face-id-scan.json';
 import BankOfWesterosLogo from './assets/bank-of-westeros.png';
 
 type Props = {
@@ -83,7 +83,7 @@ const styles = {
 };
 
 export const BankLogin = ({ onClick }: Props) => {
-  setTimeout(() => onClick(), 1000);
+  setTimeout(() => onClick(), 2750);
   return (
     <Box sx={{ ...styles }}>
       <Box sx={{ ...styles.header }}>
