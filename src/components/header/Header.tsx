@@ -19,6 +19,8 @@ const styles = {
     textAlign: 'right',
     width: '100%',
     a: {
+      fontSize: '16px',
+      fontWeight: 600,
       color: AppTheme.palette.text.primary,
       ':hover': {
         color: '#232AE2',
