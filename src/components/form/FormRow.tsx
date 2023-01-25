@@ -10,7 +10,7 @@ const styles = {
     fontSize: '10px',
     lineHeight: '12px',
     verticalAlign: 'bottom',
-    color: '#172836',
+    color: 'text.primary',
     paddingRight: '15px',
   },
   cell: { paddingTop: '5px' },

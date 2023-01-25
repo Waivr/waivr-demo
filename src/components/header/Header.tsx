@@ -1,5 +1,5 @@
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import AppTheme from '../common/global/AppTheme';
 import { Logo } from '../logo/Logo';
 
 type Props = {
@@ -8,7 +8,6 @@ type Props = {
 };
 
 const styles = {
-  typography: 'h1',
   display: 'flex',
   alignItems: 'center',
   header: {
@@ -19,9 +18,6 @@ const styles = {
     textAlign: 'right',
     width: '100%',
     a: {
-      fontSize: '16px',
-      fontWeight: 600,
-      color: AppTheme.palette.text.primary,
       ':hover': {
         color: '#232AE2',
       },
@@ -32,11 +28,15 @@ const styles = {
 export const Header = ({ label, url }: Props) => (
   <Box sx={{ ...styles }}>
     <Logo url={url} />
-    <Box sx={{ ...styles.header }}>{label}</Box>
+    <Box sx={{ ...styles.header }}>
+      <Typography variant="h1">{label}</Typography>
+    </Box>
     <Box sx={{ ...styles.link }}>
-      <a href="https://www.waivr.co/docs" target="docs">
-        API Docs
-      </a>
+      <Typography variant="h2">
+        <a href="https://www.waivr.co/docs" target="docs">
+          API Docs
+        </a>
+      </Typography>
     </Box>
   </Box>
 );

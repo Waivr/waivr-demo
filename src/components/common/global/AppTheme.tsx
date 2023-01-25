@@ -51,6 +51,12 @@ const typography: Partial<Typography> = {
     color: '#000',
     lineHeight: '24px',
   },
+  h2: {
+    fontSize: '16px',
+    fontWeight: 600,
+    color: '#000',
+    lineHeight: '18px',
+  },
 };
 
 const AppTheme: Theme = createTheme({
@@ -62,9 +68,11 @@ const AppTheme: Theme = createTheme({
     primary: {
       contrastText: '#ffffff',
       main: '#000',
+      dark: '#172836',
     },
     text: {
       primary: '#172836',
+      disabled: '#D9D9D9',
     },
   },
   shadows,
@@ -76,6 +84,10 @@ const AppTheme: Theme = createTheme({
         color: '#172836',
         [AppTheme.breakpoints.down('md')]: {
           '#root': { padding: '1rem' },
+        },
+        a: {
+          textDecoration: 'inherit',
+          color: '#000',
         },
       }),
     },
