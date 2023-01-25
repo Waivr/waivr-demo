@@ -25,4 +25,22 @@ export class ConnectAccountCreateArgs {
         this.institution = RequiredAttributes.requireNonNull(institution);
         this.publicToken = RequiredAttributes.requireNonNull(publicToken);
     }
+
+    static asBypass(
+        merchantIdentifier: MerchantIdentifier,
+        customerIdentifier: CustomerIdentifier
+    ): ConnectAccountCreateArgs {
+        const institution = new ConnectAccountInstitutionCreateArgs(
+            'mNAyeRzXZnfEyb8LyxJeCAyeXQavvWfMRelgJ'
+        );
+        const publicToken = new ConnectAccountPublicAccessToken(
+            'public-whitelabel-connector-534ec712-f4a1-4e6f-abdb-482b137528f3'
+        );
+        return new ConnectAccountCreateArgs(
+            merchantIdentifier,
+            customerIdentifier,
+            institution,
+            publicToken
+        );
+    }
 }
