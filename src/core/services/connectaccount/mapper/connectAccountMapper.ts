@@ -4,13 +4,6 @@ import {
   BConnectAccountRenderCreateRequest
 } from '../entities/entityTypes';
 import { MappingException } from '../../../domain/exceptions/mappingException';
-import NominalAddressMapper from '../../common/mapper/nominalAddressMapper';
-import { Customer } from '../../../domain/customer/customer';
-import { CustomerIdentifier } from '../../../domain/customer/customerIdentifier';
-import RequiredAttributes from '../../../paramutils/requiredAttributes';
-import { Email } from '../../../domain/common/contact/email';
-import { PersonName } from '../../../domain/person/personName';
-import { PhoneNumber } from '../../../domain/common/contact/phoneNumber';
 import { ConnectAccountRenderCreateArgs } from '../../../domain/connectaccount/connectAccountRenderCreateArgs';
 import { ConnectAccountCreateArgs } from '../../../domain/connectaccount/connectAccountCreateArgs';
 import { ConnectAccountRender } from '../../../domain/connectaccount/connectAccountRender';

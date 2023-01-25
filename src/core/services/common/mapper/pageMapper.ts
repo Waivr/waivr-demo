@@ -16,7 +16,6 @@ const mapSortable = (sort: any): Sortable => new Sortable(
  * @param pageable
  */
 const mapPageable = (pageable: any): Pageable => {
-
   const sort = mapSortable(pageable.sort);
 
   return new Pageable(
@@ -27,11 +26,9 @@ const mapPageable = (pageable: any): Pageable => {
     sort,
     pageable.unpaged,
   );
-
 };
 
 const mapPage = <T>(page: any, content: T[]): Page<T> => {
-
   const sort = mapSortable(page.sort);
   return new Page(
     content,
@@ -43,22 +40,15 @@ const mapPage = <T>(page: any, content: T[]): Page<T> => {
     page.size,
     sort
   );
-
 };
 
 const pageMapper = <T>(page: any, content: T[]): Page<T> => {
-
   try {
-
     return mapPage(page, content);
-
   } catch (err) {
-
     const stack = err instanceof Error ? err.stack : undefined;
     throw new MappingException(`Unknown err=${err} has happened while mapping Page response.`, stack);
-
   }
-
 };
 
 export default pageMapper;

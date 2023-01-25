@@ -2,7 +2,6 @@ import { BankAccountType } from './bankAccountType';
 import RequiredAttributes from '../../paramutils/requiredAttributes';
 
 export class BankAccount {
-
     institutionName: string;
 
     accountNumber: string;
@@ -18,12 +17,9 @@ export class BankAccount {
         routingNumber: string,
         accountType: BankAccountType
     ) {
-
         this.institutionName = RequiredAttributes.requireNonBlankOrNonNullDefault(institutionName, 'UNKNOWN');
         this.accountNumber = RequiredAttributes.requireNonBlank(accountNumber);
         this.routingNumber = RequiredAttributes.requireNonBlank(routingNumber);
         this.accountType = RequiredAttributes.requireNonNull(accountType);
-        
     }
-
 }

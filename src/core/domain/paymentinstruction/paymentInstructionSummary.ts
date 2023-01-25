@@ -8,8 +8,11 @@ import { PositiveAmount } from '../common/numbers/positiveAmount';
 import { FutureDate } from '../common/date/FutureDate';
 import RequiredAttributes from '../../paramutils/requiredAttributes';
 import { PaymentFrequency } from './paymentFrequency';
+import { PaymentInstructionBankAccountSummary } from './paymentInstructionBankAccountSummary';
 
-export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
+export class PaymentInstructionSummary {
+    identifier: PaymentInstructionIdentifier;
+
     externalReferenceIdentifier: PaymentInstructionExternalReferenceIdentifier;
 
     customerIdentifier: CustomerIdentifier;
@@ -26,12 +29,10 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
 
     recurringEndDate: FutureDate | null;
 
-    enableOptimalBillingDate: boolean;
+    bankAccount: PaymentInstructionBankAccountSummary;
 
     constructor(
         identifier: PaymentInstructionIdentifier,
-        createDate: Date,
-        updateDate: Date,
         externalReferenceIdentifier: PaymentInstructionExternalReferenceIdentifier,
         customerIdentifier: CustomerIdentifier,
         merchantIdentifier: MerchantIdentifier,
@@ -40,9 +41,9 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
         frequency: PaymentFrequency,
         nextBillingDate: FutureDate,
         recurringEndDate: FutureDate | null,
-        enableOptimalBillingDate: boolean
+        bankAccount: PaymentInstructionBankAccountSummary
     ) {
-        super(identifier, createDate, updateDate);
+        this.identifier = RequiredAttributes.requireNonNull(identifier);
         this.externalReferenceIdentifier = RequiredAttributes.requireNonNull(externalReferenceIdentifier);
         this.customerIdentifier = RequiredAttributes.requireNonNull(customerIdentifier);
         this.merchantIdentifier = RequiredAttributes.requireNonNull(merchantIdentifier);
@@ -51,6 +52,6 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
         this.frequency = RequiredAttributes.requireNonNull(frequency);
         this.nextBillingDate = RequiredAttributes.requireNonNull(nextBillingDate);
         this.recurringEndDate = recurringEndDate;
-        this.enableOptimalBillingDate = RequiredAttributes.requireNonNull(enableOptimalBillingDate);
+        this.bankAccount = RequiredAttributes.requireNonNull(bankAccount);
     }
 }
