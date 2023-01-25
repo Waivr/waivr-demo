@@ -23,12 +23,12 @@ const styles = {
     fontSize: '12px',
     lineHeight: '15px',
     color: '#969B9F',
-    borderBottomColor: '#D9D9D9',
+    borderBottomColor: 'text.disabled',
     borderBottomWdith: '2px',
     borderBottomStyle: 'solid',
     '&.selected': {
-      color: '#172836',
-      borderBottomColor: '#172836',
+      color: 'text.primary',
+      borderBottomColor: 'text.primary',
     },
   },
   div: {

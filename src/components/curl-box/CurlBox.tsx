@@ -17,33 +17,33 @@ export type Props = {
 
 const styles = {
   wrapper: {
-    backgroundColor: '#172836',
+    backgroundColor: 'primary.dark',
     maxHeight: '430px',
     borderRadius: '20px',
     padding: '30px',
     fontFamily: 'Inconsolata',
     overflowY: 'scroll',
     scrollbarWidth: 'auto',
-    scrollbarColor: '#5E6870 #172836',
+    scrollbarColor: '#5E6870 primary.dark',
     '::-webkit-scrollbar': {
       width: '16px',
     },
     '::-webkit-scrollbar-track': {
-      background: '#172836',
+      background: 'primary.dark',
       borderTopRightRadius: '20px',
       borderBottomRightRadius: '20px',
     },
     '::-webkit-scrollbar-thumb': {
       backgroundColor: '#5E6870',
       borderRadius: '20px',
-      border: '3px solid #172836',
+      border: '3px solid primary.dark',
     },
     [AppTheme.breakpoints.down('md')]: {
       padding: '20px',
     },
   },
   title: {
-    backgroundColor: '#fff',
+    backgroundColor: 'background.default',
     marginBottom: '20px',
     padding: '5px',
     textTransform: 'uppercase',
