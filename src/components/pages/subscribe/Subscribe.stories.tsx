@@ -41,6 +41,7 @@ const SubscribeTemplate: ComponentStory<typeof Subscribe> = (args) => (
           </Box>
           <Box sx={{ marginTop: '15px', textAlign: 'center' }}>
             <Select
+              onSelect={() => undefined}
               name="subscription"
               options={[
                 { label: '$29.99/month', value: '1', selected: true },
