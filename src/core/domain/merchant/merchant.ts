@@ -6,7 +6,6 @@ import { MerchantIdentifier } from './merchantIdentifier';
 
 
 export class Merchant extends IdObject<MerchantIdentifier> {
-
     identification: BusinessIdentification;
 
     bankInstitutions: BankAccount[];
@@ -15,14 +14,12 @@ export class Merchant extends IdObject<MerchantIdentifier> {
         identifier: MerchantIdentifier,
         createDate: Date,
         updateDate: Date,
+        rawJson: string,
         identification: BusinessIdentification,
         bankInstitutions: BankAccount[]
     ) {
-
-        super(identifier, createDate, updateDate);
+        super(identifier, createDate, updateDate, rawJson);
         this.identification = RequiredAttributes.requireNonNull(identification);
         this.bankInstitutions = RequiredAttributes.requireNonEmptyNorNullElementsArray(bankInstitutions);
-        
     }
-
 }

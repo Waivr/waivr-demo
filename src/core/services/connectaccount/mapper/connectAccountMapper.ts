@@ -17,10 +17,14 @@ const mapConnectAccountRender = (connectAccountRender: any): ConnectAccountRende
       ];
   const linkingAccessToken = new ConnectAccountLinkingAccessToken(connectAccountRender.linkingAccessToken);
   const validUntil = FutureDate.basedOfNow(connectAccountRender.validUntil);
+
+  const rawJson = JSON.stringify(connectAccountRender);
+
   return new ConnectAccountRender(
       type,
       linkingAccessToken,
-      validUntil
+      validUntil,
+      rawJson
   );
 };
 

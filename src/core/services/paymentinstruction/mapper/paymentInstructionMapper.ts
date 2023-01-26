@@ -48,10 +48,14 @@ const mapPaymentInstruction = (paymentInstruction: any): PaymentInstruction => {
       DateUtils.buildFutureDate(createDate, paymentInstruction.nextBillingDate)
   );
   const recurringEndDate = DateUtils.buildFutureDate(createDate, paymentInstruction.recurringEndDate);
+
+  const rawJson = JSON.stringify(paymentInstruction);
+
   return new PaymentInstruction(
     identifier,
       createDate,
     new Date(RequiredAttributes.requireNonNull(paymentInstruction.updateDate)),
+      rawJson,
       externalReferenceIdentifier,
       customerIdentifier,
       merchantIdentifier,
@@ -102,6 +106,8 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
       paymentInstructionSummary.bankAccount.maskedRoutingNumber,
   );
 
+  const rawJson = JSON.stringify(paymentInstructionSummary);
+
   return new PaymentInstructionSummary(
     identifier,
       externalReferenceIdentifier,
@@ -113,6 +119,7 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
       nextBillingDate,
       recurringEndDate,
       bankAccount,
+      rawJson,
   );
 };
 

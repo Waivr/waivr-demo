@@ -31,6 +31,8 @@ export class PaymentInstructionSummary {
 
     bankAccount: PaymentInstructionBankAccountSummary;
 
+    rawJson: string;
+
     constructor(
         identifier: PaymentInstructionIdentifier,
         externalReferenceIdentifier: PaymentInstructionExternalReferenceIdentifier,
@@ -41,7 +43,8 @@ export class PaymentInstructionSummary {
         frequency: PaymentFrequency,
         nextBillingDate: FutureDate,
         recurringEndDate: FutureDate | null,
-        bankAccount: PaymentInstructionBankAccountSummary
+        bankAccount: PaymentInstructionBankAccountSummary,
+        rawJson: string
     ) {
         this.identifier = RequiredAttributes.requireNonNull(identifier);
         this.externalReferenceIdentifier = RequiredAttributes.requireNonNull(externalReferenceIdentifier);
@@ -53,5 +56,6 @@ export class PaymentInstructionSummary {
         this.nextBillingDate = RequiredAttributes.requireNonNull(nextBillingDate);
         this.recurringEndDate = recurringEndDate;
         this.bankAccount = RequiredAttributes.requireNonNull(bankAccount);
+        this.rawJson = RequiredAttributes.requireNonBlank(rawJson);
     }
 }

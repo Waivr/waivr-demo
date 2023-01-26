@@ -15,10 +15,14 @@ const mapCustomer = (customer: any): Customer => {
   const personName = PersonName.of(customer.firstName, customer.lastName);
   const phoneNumber = (customer.phoneNumber && new PhoneNumber(customer.phoneNumber)) || null;
   const address = (customer.address && NominalAddressMapper.fromObject(customer.address)) || null;
+
+  const rawJson = JSON.stringify(customer);
+
   return new Customer(
     customerIdentifier,
     new Date(RequiredAttributes.requireNonNull(customer.createDate)),
     new Date(RequiredAttributes.requireNonNull(customer.updateDate)),
+    rawJson,
     email,
     personName,
     phoneNumber,
