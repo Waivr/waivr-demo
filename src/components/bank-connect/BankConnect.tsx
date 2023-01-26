@@ -15,7 +15,7 @@ const styles = {
     boxShadow: 24,
     zIndex: 10,
     overflowY: 'scroll',
-    'scrollbar-width': 'none',
+    scrollbarWidth: 'none',
     ' -ms-overflow-style': 'none',
     '::-webkit-scrollbar': {
       display: 'none',

@@ -27,6 +27,7 @@
     "@vitejs/plugin-react": "^3.0.0",
     "airbnb": "^0.0.2",
     "axios": "^1.2.1",
+    "axios-mock-adapter": "^1.21.2",
     "dotenv": "^16.0.3",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

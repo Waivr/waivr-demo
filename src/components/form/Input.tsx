@@ -4,6 +4,8 @@ import TextField from '@mui/material/TextField';
 export type InputProps = {
   defaultValue: string;
   type: 'text' | 'email';
+  disabled: boolean;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 };
 
 const styles = {
@@ -25,7 +27,12 @@ const styles = {
   },
 };
 
-export const Input = ({ defaultValue, type }: InputProps) => (
+export const Input = ({
+  defaultValue,
+  type,
+  disabled,
+  onChange,
+}: InputProps) => (
   <Box>
     <TextField
       sx={{ ...styles }}
@@ -38,6 +45,8 @@ export const Input = ({ defaultValue, type }: InputProps) => (
       InputLabelProps={{
         disableAnimation: true,
       }}
+      onChange={onChange}
+      disabled={disabled}
     />
   </Box>
 );

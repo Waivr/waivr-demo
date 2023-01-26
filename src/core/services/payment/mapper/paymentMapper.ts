@@ -16,18 +16,18 @@ const mapPayment = (payment: any): Payment => {
       ];
   const amount = new PositiveAmount(payment.amount);
   const paymentDate = RequiredAttributes.requireNonNull(
-      DateUtils.buildFutureDate(createDate, payment.paymentDate)
+    DateUtils.buildFutureDate(createDate, new Date(payment.paymentDate))
   );
 
   const rawJson = JSON.stringify(payment);
 
   return new Payment(
-      paymentIdentifier,
-      createDate,
+    paymentIdentifier,
+    createDate,
     new Date(RequiredAttributes.requireNonNull(payment.updateDate)),
-      rawJson,
-      status,
-      amount,
+    rawJson,
+    status,
+    amount,
       paymentDate,
   );
 };
@@ -46,9 +46,9 @@ const fromObject = (payment: any): Payment => {
 };
 
 const mapCreateRequest = (request: PaymentCreateArgs): BPaymentCreateRequest => ({
-    paymentInstructionUid: request.paymentInstructionIdentifier.value,
-    methodType: request.methodType,
-  });
+  paymentInstructionUid: request.paymentInstructionIdentifier.value,
+  methodType: request.methodType,
+});
 
 const toApiCreateRequest = (request:PaymentCreateArgs): BPaymentCreateRequest => {
   try {

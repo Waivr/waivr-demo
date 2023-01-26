@@ -3,6 +3,8 @@ import { Input, InputProps } from './Input';
 
 type Props = InputProps & {
   label: string;
+  disabled: boolean;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 };
 
 const styles = {
@@ -22,7 +24,13 @@ const styles = {
   - handle validation likely at the parent component
 */
 
-export const FormRow = ({ label, defaultValue, type }: Props) => (
+export const FormRow = ({
+  label,
+  defaultValue,
+  type,
+  disabled,
+  onChange,
+}: Props) => (
   <>
     <Grid item xs={3} sx={{ ...styles.cell }}>
       <Box sx={{ textAlign: 'end' }}>
@@ -30,7 +38,12 @@ export const FormRow = ({ label, defaultValue, type }: Props) => (
       </Box>
     </Grid>
     <Grid item xs={7} sx={{ ...styles.cell }}>
-      <Input defaultValue={defaultValue} type={type} />
+      <Input
+        defaultValue={defaultValue}
+        type={type}
+        onChange={onChange}
+        disabled={disabled}
+      />
     </Grid>
   </>
 );

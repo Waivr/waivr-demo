@@ -9,7 +9,7 @@ export class FutureDate {
   constructor(baseDate: Date, value: Date) {
     this.baseDate = RequiredAttributes.requireNonNull(baseDate);
     this.value = RequiredAttributes.requireNonNull(value);
-    DateUtils.requireAfterDate(baseDate, value);
+    DateUtils.requireAfterDate(value, baseDate);
   }
 
   public static basedOfNow(value: Date): FutureDate {
