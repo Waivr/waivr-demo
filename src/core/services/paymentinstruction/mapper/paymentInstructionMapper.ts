@@ -20,19 +20,6 @@ import {
   PaymentInstructionBankAccountSummary
 } from '../../../domain/paymentinstruction/paymentInstructionBankAccountSummary';
 
-const mapFutureDate = (baseDate: Date, date: Date | null): FutureDate | null => {
-  if (date === null) {
-    return null;
-  }
-
-  if (DateUtils.isAfterDate(date, baseDate)) {
-    return new FutureDate(baseDate, date);
-  }
-
-  const dayBefore = DateUtils.addTimeUnit(date, TimeUnit.DAY, -1);
-  return new FutureDate(dayBefore, date);
-};
-
 const mapPaymentFrequency = (frequency: any): PaymentFrequency => {
   const cycle:PaymentFrequencyCycle = PaymentFrequencyCycle[
       frequency.cycle as keyof typeof PaymentFrequencyCycle
@@ -58,9 +45,9 @@ const mapPaymentInstruction = (paymentInstruction: any): PaymentInstruction => {
   const amount = new PositiveAmount(paymentInstruction.amount);
   const frequency = mapPaymentFrequency(paymentInstruction.frequency);
   const nextBillingDate = RequiredAttributes.requireNonNull(
-      mapFutureDate(createDate, paymentInstruction.nextBillingDate)
+      DateUtils.buildFutureDate(createDate, paymentInstruction.nextBillingDate)
   );
-  const recurringEndDate = mapFutureDate(createDate, paymentInstruction.recurringEndDate);
+  const recurringEndDate = DateUtils.buildFutureDate(createDate, paymentInstruction.recurringEndDate);
   return new PaymentInstruction(
     identifier,
       createDate,
@@ -105,9 +92,9 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
 
   const now = new Date();
   const nextBillingDate = RequiredAttributes.requireNonNull(
-      mapFutureDate(now, paymentInstructionSummary.nextBillingDate)
+      DateUtils.buildFutureDate(now, paymentInstructionSummary.nextBillingDate)
   );
-  const recurringEndDate = mapFutureDate(now, paymentInstructionSummary.recurringEndDate);
+  const recurringEndDate = DateUtils.buildFutureDate(now, paymentInstructionSummary.recurringEndDate);
 
   const bankAccount = new PaymentInstructionBankAccountSummary(
       paymentInstructionSummary.bankAccount.institutionName,

@@ -7,6 +7,7 @@ import ConnectAccountService, { IConnectAccountService } from '../../connectacco
 import PaymentInstructionService, {
     IPaymentInstructionService
 } from '../../paymentinstruction/paymentInstructionService';
+import PaymentService, { IPaymentService } from '../../payment/paymentService';
 
 const api = () => axios.create({
         withCredentials: false,
@@ -20,12 +21,14 @@ const merchantService = (axiosInstance: AxiosInstance) => MerchantService.instan
 const customerService = (axiosInstance: AxiosInstance) => CustomerService.instance(axiosInstance);
 const connectAccountService = (axiosInstance: AxiosInstance) => ConnectAccountService.instance(axiosInstance);
 const paymentInstructionService = (axiosInstance: AxiosInstance) => PaymentInstructionService.instance(axiosInstance);
+const paymentService = (axiosInstance: AxiosInstance) => PaymentService.instance(axiosInstance);
 
 export interface IWaivrAppApiRegistry {
     merchantService: () => IMerchantService;
     customerService: () => ICustomerService;
     connectAccountService: () => IConnectAccountService;
     paymentInstructionService: () => IPaymentInstructionService;
+    paymentService: () => IPaymentService;
 }
 
 const instance = (axiosInstance: AxiosInstance): IWaivrAppApiRegistry => ({
@@ -33,6 +36,7 @@ const instance = (axiosInstance: AxiosInstance): IWaivrAppApiRegistry => ({
     customerService: () => customerService(axiosInstance),
     connectAccountService: () => connectAccountService(axiosInstance),
     paymentInstructionService: () => paymentInstructionService(axiosInstance),
+    paymentService: () => paymentService(axiosInstance),
 });
 
 const WaivrAppApiRegistry = {
