@@ -11,13 +11,17 @@ export class ConnectAccountRender {
 
     validUntil: FutureDate;
 
+    rawJson: string;
+
     constructor(
         type: ConnectAccountLinkingAccountType,
         linkingAccessToken: ConnectAccountLinkingAccessToken,
-        validUntil: FutureDate
+        validUntil: FutureDate,
+        rawJson: string,
     ) {
         this.type = RequiredAttributes.requireNonNull(type);
         this.linkingAccessToken = RequiredAttributes.requireNonNull(linkingAccessToken);
         this.validUntil = RequiredAttributes.requireNonNull(validUntil);
+        this.rawJson = RequiredAttributes.requireNonBlank(rawJson);
     }
 }

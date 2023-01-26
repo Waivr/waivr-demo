@@ -18,10 +18,14 @@ const mapPayment = (payment: any): Payment => {
   const paymentDate = RequiredAttributes.requireNonNull(
       DateUtils.buildFutureDate(createDate, payment.paymentDate)
   );
+
+  const rawJson = JSON.stringify(payment);
+
   return new Payment(
       paymentIdentifier,
       createDate,
     new Date(RequiredAttributes.requireNonNull(payment.updateDate)),
+      rawJson,
       status,
       amount,
       paymentDate,

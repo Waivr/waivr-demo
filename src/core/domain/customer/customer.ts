@@ -19,12 +19,13 @@ export class Customer extends IdObject<CustomerIdentifier> {
         identifier: CustomerIdentifier,
         createDate: Date,
         updateDate: Date,
+        rawJson: string,
         email: Email,
         personName: PersonName,
         phoneNumber: PhoneNumber | null,
         address: NominalAddress | null
     ) {
-        super(identifier, createDate, updateDate);
+        super(identifier, createDate, updateDate, rawJson);
         this.email = RequiredAttributes.requireNonNull(email);
         this.personName = RequiredAttributes.requireNonNull(personName);
         this.phoneNumber = phoneNumber;

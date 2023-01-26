@@ -16,11 +16,12 @@ export class Payment extends IdObject<PaymentIdentifier> {
         identifier: PaymentIdentifier,
         createDate: Date,
         updateDate: Date,
+        rawJson: string,
         status: PaymentStatus,
         amount: PositiveAmount,
         paymentDate: FutureDate,
     ) {
-        super(identifier, createDate, updateDate);
+        super(identifier, createDate, updateDate, rawJson);
         this.status = RequiredAttributes.requireNonNull(status);
         this.amount = RequiredAttributes.requireNonNull(amount);
         this.paymentDate = RequiredAttributes.requireNonNull(paymentDate);

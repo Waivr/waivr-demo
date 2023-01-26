@@ -32,6 +32,7 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
         identifier: PaymentInstructionIdentifier,
         createDate: Date,
         updateDate: Date,
+        rawJson: string,
         externalReferenceIdentifier: PaymentInstructionExternalReferenceIdentifier,
         customerIdentifier: CustomerIdentifier,
         merchantIdentifier: MerchantIdentifier,
@@ -42,7 +43,7 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
         recurringEndDate: FutureDate | null,
         enableOptimalBillingDate: boolean
     ) {
-        super(identifier, createDate, updateDate);
+        super(identifier, createDate, updateDate, rawJson);
         this.externalReferenceIdentifier = RequiredAttributes.requireNonNull(externalReferenceIdentifier);
         this.customerIdentifier = RequiredAttributes.requireNonNull(customerIdentifier);
         this.merchantIdentifier = RequiredAttributes.requireNonNull(merchantIdentifier);
