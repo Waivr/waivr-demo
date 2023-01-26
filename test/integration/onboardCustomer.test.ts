@@ -18,6 +18,8 @@ import { PaymentFrequency } from '../../src/core/domain/paymentinstruction/payme
 import { PaymentFrequencyCycle } from '../../src/core/domain/paymentinstruction/paymentFrequencyCycle';
 import { FutureDate } from '../../src/core/domain/common/date/FutureDate';
 import DateUtils, { TimeUnit } from '../../src/core/paramutils/dateUtils';
+import { PaymentCreateArgs } from '../../src/core/domain/payment/paymentCreateArgs';
+import { PaymentMethodType } from '../../src/core/domain/payment/paymentMethodType';
 
 describe.skip('Onboard Customer End2End', () => {
     const envApiRegistries = EnvApiScopeEnd2End.stage();
@@ -27,6 +29,7 @@ describe.skip('Onboard Customer End2End', () => {
         const customerService = waivrAppApiRegistry.customerService();
         const connectAccountService = waivrAppApiRegistry.connectAccountService();
         const paymentInstructionService = waivrAppApiRegistry.paymentInstructionService();
+        const paymentService = waivrAppApiRegistry.paymentService();
 
 
         // Creates a new customer
@@ -65,12 +68,22 @@ describe.skip('Onboard Customer End2End', () => {
         // Gets fresh summary for payment instruction to be paid
         const paymentInstructionSummary = await paymentInstructionService.findSummary(paymentInstruction.identifier, apiToken);
         expect(paymentInstructionSummary).not.toBeNull();
+
+
+        // Initiates a payment origination
+        const paymentCreateArgs = new PaymentCreateArgs(
+            paymentInstruction.identifier,
+            PaymentMethodType.ACH
+        );
+        const payment = await paymentService.create(paymentCreateArgs, apiToken);
+        expect(payment).not.toBeNull();
     });
 
     it.skip('onboardCustomer using a Bank connected via PLAID ', async () => {
         const customerService = waivrAppApiRegistry.customerService();
         const connectAccountService = waivrAppApiRegistry.connectAccountService();
         const paymentInstructionService = waivrAppApiRegistry.paymentInstructionService();
+        const paymentService = waivrAppApiRegistry.paymentService();
 
 
         // Creates a new customer
@@ -125,5 +138,14 @@ describe.skip('Onboard Customer End2End', () => {
         // Gets fresh summary for payment instruction to be paid
         const paymentInstructionSummary = await paymentInstructionService.findSummary(paymentInstruction.identifier, apiToken);
         expect(paymentInstructionSummary).not.toBeNull();
+
+
+        // Initiates a payment origination
+        const paymentCreateArgs = new PaymentCreateArgs(
+            paymentInstruction.identifier,
+            PaymentMethodType.ACH
+        );
+        const payment = await paymentService.create(paymentCreateArgs, apiToken);
+        expect(payment).not.toBeNull();
     });
 });

@@ -1,5 +1,6 @@
 import RequiredAttributes from './requiredAttributes';
 import { RequiredException } from '../domain/exceptions/requiredException';
+import { FutureDate } from '../domain/common/date/FutureDate';
 
 const isAfterDate = (source: NonNullable<Date>, target: NonNullable<Date>): boolean => {
   RequiredAttributes.requireNonNull(source, 'source date');
@@ -49,10 +50,24 @@ const addTimeUnit = (source: Date, timeUnit: TimeUnit, addAmount: number): Date 
   throw new Error(`Unsupported source=${source} to addAmount=${addAmount} for timeUnit=${timeUnit}`);
 };
 
+const buildFutureDate = (baseDate: Date, date: Date | null): FutureDate | null => {
+  if (date === null) {
+    return null;
+  }
+
+  if (isAfterDate(date, baseDate)) {
+    return new FutureDate(baseDate, date);
+  }
+
+  const dayBefore = addTimeUnit(date, TimeUnit.DAY, -1);
+  return new FutureDate(dayBefore, date);
+};
+
 const DateUtils = {
   isFutureDate,
   isAfterDate,
 
+  buildFutureDate,
   addTimeUnit,
 
   requireFutureDate,
