@@ -4,6 +4,7 @@ type Props = {
   label: string;
   backgroundColor: string;
   textColor: string;
+  disabled?: boolean;
   onClick: (evt: any) => void;
 };
 
@@ -14,7 +15,6 @@ const styles = {
   display: 'inline-block',
   borderRadius: '17.5px',
   textAlign: 'center',
-  cursor: 'pointer',
   fontSize: '12px',
   fontWeight: '700',
   fontStyle: 'normal',
@@ -25,11 +25,17 @@ export const Button = ({
   label,
   backgroundColor,
   textColor,
+  disabled,
   onClick,
 }: Props) => (
   <Box
-    sx={{ ...styles, bgcolor: backgroundColor, color: textColor }}
-    onClick={onClick}
+    sx={{
+      ...styles,
+      bgcolor: disabled ? '#969B9F' : backgroundColor,
+      color: textColor,
+      cursor: disabled ? 'inherit' : 'pointer',
+    }}
+    onClick={(evt) => (disabled ? undefined : onClick(evt))}
   >
     {label}
   </Box>

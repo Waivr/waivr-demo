@@ -1,3 +1,4 @@
 export enum ConnectAccountLinkingAccountType {
-    PLAID= 'PLAID',
+  PLAID = 'PLAID',
+  DEMO = 'DEMO',
 }

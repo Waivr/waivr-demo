@@ -37,8 +37,8 @@ const styles = {
     gridTemplateColumns: 'repeat(12, 1fr)',
     marginBottom: '15px',
     icon: {
-      'grid-column-start': '1',
-      'grid-column-end': '1',
+      gridColumnStart: '1',
+      gridColumnEnd: '1',
       img: {
         width: '100%',
       },
@@ -47,8 +47,8 @@ const styles = {
       marginRight: '12px',
     },
     content: {
-      'grid-column-start': '2',
-      'grid-column-end': '12',
+      gridColumnStart: '2',
+      gridColumnEnd: '12',
       fontSize: '13px',
       lineHeight: '15px',
     },

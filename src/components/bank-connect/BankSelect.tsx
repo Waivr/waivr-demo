@@ -46,8 +46,8 @@ const styles = {
       borderBottom: 'none',
     },
     logo: {
-      'grid-column-start': '0',
-      'grid-column-end': '1',
+      gridColumnStart: '0',
+      gridColumnEnd: '1',
       img: {
         width: '100%',
       },
@@ -55,8 +55,8 @@ const styles = {
       height: '50px',
     },
     content: {
-      'grid-column-start': '2',
-      'grid-column-end': '12',
+      gridColumnStart: '2',
+      gridColumnEnd: '12',
       lineHeight: '10px',
     },
     title: {
@@ -115,7 +115,11 @@ export const BankSelect = ({ onClick }: Props) => (
       </Box>
     </Box>
     {banks.map((bank) => (
-      <Box sx={{ ...styles.list }} onClick={() => onClick(bank)}>
+      <Box
+        key={bank.name}
+        sx={{ ...styles.list }}
+        onClick={() => onClick(bank)}
+      >
         <Box sx={{ ...styles.list.logo }}>
           <img src={bank.logo} alt={bank.name} />
         </Box>

@@ -1,29 +1,58 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { AccountSelection } from '../bank-connect/AccountSelection';
-import { BankConnect } from '../bank-connect/BankConnect';
-import { BankLogin } from '../bank-connect/BankLogin';
-import { BankSelect } from '../bank-connect/BankSelect';
-import { Consent } from '../bank-connect/Consent';
-import { Success } from '../bank-connect/Success';
+import { CustomerCreateArgs } from '../../core/domain/customer/customerCreateArgs';
+import { PersonName } from '../../core/domain/person/personName';
+import { FirstName } from '../../core/domain/person/firstName';
+import { LastName } from '../../core/domain/person/lastName';
 import { Button } from '../button/Button';
 import { CurlBox, Props as CurlProps, CurlLog } from '../curl-box/CurlBox';
-import { Form } from '../form/Form';
-import { FormRow } from '../form/FormRow';
 import { Panel } from '../panel/Panel';
 import { PanelHeader } from '../panel/PanelHeader';
-import { Select, Option } from '../select/Select';
+import { Option } from '../select/Select';
+import {
+  confirmPayment,
+  connectAccounts,
+  connectAccountsRender,
+  createCustomer,
+  createPaymentInstructions,
+} from './curl-templates';
 import DemoLayout from './layout/DemoLayout';
+import { createApiRegistery } from './requests';
+import { SubscriptionPanel } from './SubscriptionPanel';
+import { ConnectAccountRenderCreateArgs } from '../../core/domain/connectaccount/connectAccountRenderCreateArgs';
+import { ConnectAccountCreateArgs } from '../../core/domain/connectaccount/connectAccountCreateArgs';
+import { PaymentInstructionCreateArgs } from '../../core/domain/paymentinstruction/paymentInstructionCreateArgs';
+import { PositiveAmount } from '../../core/domain/common/numbers/positiveAmount';
+import { PaymentFrequencyCycle } from '../../core/domain/paymentinstruction/paymentFrequencyCycle';
+import { FutureDate } from '../../core/domain/common/date/FutureDate';
+import DateUtils, { TimeUnit } from '../../core/paramutils/dateUtils';
+import { PaymentCreateArgs } from '../../core/domain/payment/paymentCreateArgs';
+import { PaymentMethodType } from '../../core/domain/payment/paymentMethodType';
+import { BankConnectWrapper } from '../bank-connect/Wrapper';
+import { nthNumber, timeout } from '../utilities';
+
+const merchantUid = '67f14ac8-74c3-428c-b577-bd999bc4a599';
+const externalReferenceIdentifier = 'ancestry.com';
+const token = { key: '', secret: '' };
+const timeoutDuration = 1000;
+const apiRegistery = createApiRegistery();
 
 const Demo = () => {
-  const [openBankConnect, setOpenBankConnect] = React.useState(false);
+  // Set default form field values
   const [subscriptions, setSubscriptions] = React.useState([
-    { label: '$29.99/month', value: '1', selected: true },
-    { label: '$19.99/month', value: '2' },
+    { label: '$29.99/month', value: '29.99', selected: true },
+    { label: '$19.99/month', value: '19.99' },
   ]);
-  // Manage the bank connect screens
+  const [firstName, setFirstName] = React.useState('John');
+  const [lastName, setLastName] = React.useState('Snow');
+  const [email, setEmail] = React.useState('johnsnow@northwall.com');
+  const [nextBillingDay, setNextBillingDay] = React.useState<null | Date>(null);
+
+  // App state
+  const [openBankConnect, setOpenBankConnect] = React.useState(false);
   const [bankConnectScreen, setBankConnectScreen] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [curl, setCurl] = React.useState({
     logs: [
@@ -34,12 +63,15 @@ const Demo = () => {
     ],
   } as CurlProps);
 
-  const timeout = (delay: number) =>
-    // eslint-disable-next-line no-promise-executor-return
-    new Promise((res) => setTimeout(res, delay));
+  // API state
+  const [customerUid, setCustomerUid] = React.useState('');
+  const [paymentUid, setPaymentUid] = React.useState('');
+  const [accountId, setAccountId] = React.useState('');
+  const [institutionId, setInstituionId] = React.useState('');
 
   const handleReset = () => {
     setOpenBankConnect(false);
+    setLoading(false);
     setBankConnectScreen(0);
     setCurrentStep(0);
     setCurl({
@@ -65,288 +97,252 @@ const Demo = () => {
     setSubscriptions([...subscriptions]);
   };
 
-  const updateCurlLogs = (log: CurlLog, logs: CurlLog[]): CurlLog[] => {
+  const updateCurlLogs = (log: CurlLog, logs: CurlLog[]) => {
     if (log != null && log.id != null) {
       // eslint-disable-next-line react/prop-types
       const logIndex = logs.findIndex((l: any) => l.id === log.id);
       if (logIndex >= 0) {
         // eslint-disable-next-line react/prop-types
         logs[logIndex] = log;
+      } else {
+        logs.push(log);
       }
     }
-    return logs;
+    setCurl({ logs });
   };
 
   const handlePayByBank = async () => {
     setOpenBankConnect(false);
     setCurrentStep(0);
-
-    // Steps:
-    // 1. Call api to create customer
-    // 2. open bank connect
-
-    let { logs } = curl;
-
+    setLoading(true);
     let currentState = {
       id: '0',
       response: '',
-      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
---header 'Content-Type: application/json' \
---data-raw '{
-"merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
-"email": "john.snow@northwall.com",
-"firstName": "John",
-"lastName": "Snow",
-}
-}'`,
+      request: createCustomer(merchantUid, firstName, lastName, email),
       title: 'creating customer...',
       isLoading: true,
     };
+    updateCurlLogs(currentState, curl.logs);
 
-    logs = updateCurlLogs(currentState, logs);
+    const createCustomerResponse = await apiRegistery
+      .customerService()
+      .create(
+        new CustomerCreateArgs(
+          { value: merchantUid },
+          { value: email },
+          new PersonName(new FirstName(firstName), new LastName(lastName)),
+          null,
+          null
+        ),
+        token
+      );
 
-    setCurl({ logs });
-    // TODO move logic to api layer and remove simulated delay
-    await timeout(2000);
+    // Save customer id to state
+    setCustomerUid(createCustomerResponse.identifier.value);
     currentState = {
       ...currentState,
       isLoading: false,
-      response: `{
-"uid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
-"createDate": "2022-12-12T19:57:44.438588476Z",
-"updateDate": "2022-12-12T19:57:44.623806274Z",
-"email": "john.snow@northwall.com",
-"firstName": "John",
-"lastName": "Snow",
-"phoneNumber": "4541239955",
-"address": {
-"line1": "5th Tower",
-"line2": null,
-"city": "North Wall",
-"state": "Winterfell"
-}}`,
+      response: createCustomerResponse.rawJson,
       title: 'Customer is created',
     };
+    updateCurlLogs(currentState, curl.logs);
 
-    logs = updateCurlLogs(currentState, logs);
-    setCurl({ logs });
-    await timeout(1000);
+    let renderLog = {
+      id: 'render',
+      response: '',
+      request: connectAccountsRender(merchantUid),
+      title: '[New title - connect accounts render]...',
+      isLoading: true,
+    };
+    updateCurlLogs(renderLog, curl.logs);
+
+    const renderResponse = await apiRegistery
+      .connectAccountService()
+      .createRenderLink(
+        new ConnectAccountRenderCreateArgs({ value: merchantUid }),
+        token
+      );
+
+    renderLog = {
+      ...renderLog,
+      isLoading: false,
+      response: renderResponse.rawJson,
+      title: '[New title - connect accounts render done]...',
+    };
+    updateCurlLogs(renderLog, curl.logs);
+
+    setLoading(false);
     setOpenBankConnect(true);
+  };
+
+  const handleOnSuccess = async (
+    account: string,
+    institution: string,
+    bankToken: string
+  ) => {
+    setAccountId(account);
+    setInstituionId(institution);
+    setCurrentStep(1);
+    setLoading(true);
+
+    let currentState = {
+      id: '1',
+      response: '',
+      request: connectAccounts(
+        merchantUid,
+        customerUid,
+        institutionId,
+        accountId,
+        bankToken
+      ),
+      title: 'Establishing bank connection...',
+      isLoading: true,
+    };
+    updateCurlLogs(currentState, curl.logs);
+
+    await apiRegistery.connectAccountService().linkCustomerAccount(
+      new ConnectAccountCreateArgs(
+        { value: merchantUid },
+        { value: customerUid },
+        {
+          accountIdentifier: accountId,
+        },
+        {
+          value: bankToken,
+        }
+      ),
+      token
+    );
+
+    currentState = {
+      ...currentState,
+      isLoading: false,
+      title: 'BANK CONNECTION IS ESTABLISHED',
+    };
+
+    updateCurlLogs(currentState, curl.logs);
+
+    const analysisLog = {
+      request: 'Verifying balance...',
+      title: 'Transactions are analyzed and optimal billing date set',
+      isLoading: true,
+      id: 'transactions',
+    };
+
+    updateCurlLogs(analysisLog, curl.logs);
+
+    await timeout(timeoutDuration);
+    analysisLog.request += '\nAnalyzing cash flows...';
+    updateCurlLogs(analysisLog, curl.logs);
+    await timeout(timeoutDuration);
+
+    analysisLog.request += '\nSetting optimal billing date...';
+    updateCurlLogs(analysisLog, curl.logs);
+    await timeout(timeoutDuration);
+
+    analysisLog.isLoading = false;
+    updateCurlLogs(analysisLog, curl.logs);
+
+    const subscription = subscriptions.find((s) => s.selected === true);
+
+    let instructions = {
+      response: '',
+      request: createPaymentInstructions(
+        externalReferenceIdentifier,
+        customerUid,
+        merchantUid,
+        subscription?.value ?? ''
+      ),
+      title: 'Payment instructions generating...',
+      isLoading: true,
+      id: 'instructions',
+    };
+
+    updateCurlLogs(instructions, curl.logs);
+
+    // TODO better error handling for value here
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const amount = new PositiveAmount(parseInt(subscription!.value, 10));
+
+    const paymentInstructionsResponse = await apiRegistery
+      .paymentInstructionService()
+      .create(
+        new PaymentInstructionCreateArgs(
+          { value: externalReferenceIdentifier },
+          {
+            value: customerUid,
+          },
+          {
+            value: merchantUid,
+          },
+          amount,
+          { cycle: PaymentFrequencyCycle.MONTHLY, recurrence: amount },
+          FutureDate.basedOfNow(
+            DateUtils.addTimeUnit(new Date(), TimeUnit.MINUTE, 60)
+          )
+        ),
+        token
+      );
+
+    setPaymentUid(paymentInstructionsResponse.identifier.value);
+
+    instructions = {
+      ...instructions,
+      isLoading: false,
+      response: paymentInstructionsResponse.rawJson,
+      title: 'PAYMENT INSTRUCTION IS GENERATED',
+    };
+
+    setNextBillingDay(paymentInstructionsResponse.nextBillingDate.value);
+    updateCurlLogs(instructions, curl.logs);
+
+    setLoading(false);
   };
 
   const handleBankConnect = async () => {
     if (bankConnectScreen < 4) {
       setBankConnectScreen(bankConnectScreen + 1);
     } else {
+      // Close and reset
       setOpenBankConnect(false);
       setBankConnectScreen(0);
-      // Steps:
-      // 1. Hide bank connect modal
-      // 2. Call api to connect account
-      // 3. Move to confirm step
-
-      let { logs } = curl;
-
-      let currentState = {
-        id: '1',
-        response: '',
-        request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/connectaccounts/render' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
---header 'Content-Type: application/json' \
---data-raw '{
-"merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599"
-}'`,
-        title: 'Establishing bank connection...',
-        isLoading: true,
-      };
-
-      logs.push(currentState);
-      setCurl({ logs });
-      // TODO move logic to api layer and remove simulated delay
-      await timeout(2000);
-      currentState = {
-        ...currentState,
-        isLoading: false,
-        response: `{
-  "type": "PLAID",
-  "linkingAccessToken": "link-sandbox-613f419b-f7a0-4410-9a4a-e5c44212f7a1",
-  "validUntil": "2022-12-13T00:07:18Z",
-
-  "status": null,
-  "link_session_id": "457e3201-2049-48c9-ae74-fb482249c2fc",
-  "institution": {
-    "name": "Chase",
-    "institution_id": "ins_56"
-  },
-  "accounts": [
-    {
-      "id": "goadzaX3gAseb6eJGnGDTXAkka31rAi43rg38",
-      "name": "Plaid Checking",
-      "mask": "0000",
-      "type": "depository",
-      "subtype": "checking",
-      "verification_status": null,
-      "class_type": null
-    }
-  ],
-  "account": {
-    "id": "goadzaX3gAseb6eJGnGDTXAkka31rAi43rg38",
-    "name": "Plaid Checking",
-    "mask": "0000",
-    "type": "depository",
-    "subtype": "checking",
-    "verification_status": null,
-    "class_type": null,
-    "account_id": "goadzaX3gAseb6eJGnGDTXAkka31rAi43rg38",
-    "transfer_status": null,
-    "public_token": "public-sandbox-4aa91553-561e-4bd6-ac59-d9d8f643fdce"
-  }
-}
-`,
-        title: 'BANK CONNECTION IS ESTABLISHED',
-      };
-
-      logs = updateCurlLogs(currentState, logs);
-
-      setCurl({ logs });
-      await timeout(1000);
-
-      const analysisLog = {
-        request: 'Verifying balance...',
-        title: 'Transactions are analyzed and optimal billing date set',
-        isLoading: true,
-        id: 'transactions',
-      };
-
-      logs.push(analysisLog);
-      setCurl({ logs });
-
-      await timeout(1000);
-      analysisLog.request += '\nAnalyzing cash flows...';
-      logs = updateCurlLogs(analysisLog, logs);
-      setCurl({ logs });
-      await timeout(1000);
-
-      analysisLog.request += '\nSetting optimal billing date...';
-      logs = updateCurlLogs(analysisLog, logs);
-      setCurl({ logs });
-      await timeout(1000);
-
-      analysisLog.isLoading = false;
-      logs = updateCurlLogs(analysisLog, logs);
-      setCurl({ logs });
-
-      let instructions = {
-        response: '',
-        request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/paymentinstructions' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
---header 'Content-Type: application/json' \
---data-raw '{
- "externalReferenceIdentifier" : "ancestry.com",
- "customerUid" : "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
- "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
- "amount" : 29.99,
- "frequency" : {
-   "recurrence" : 1,
-   "cycle" : "MONTHLY"
- }
-}'`,
-        title: 'Payment instructions generating...',
-        isLoading: true,
-        id: 'instructions',
-      };
-
-      logs.push(instructions);
-      setCurl({ logs });
-
-      await timeout(1000);
-
-      instructions = {
-        ...instructions,
-        isLoading: false,
-        response: `{
-   "uid": "48548386-99fb-4de4-b8f6-513945c944e8",
-   "customerUid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
-   "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599",
-   "createDate": "2022-12-09T20:42:11.79212Z",
-   "updateDate": "2022-12-09T20:42:11.79212Z",
-   "externalReferenceIdentifier": "ancestry.com",
-   "status": "PENDING",
-   "amount": 29.99,
-   "frequency": {
-       "cycle": "MONTHLY",
-       "recurrence": 1
-   },
-   "nextBillingDate": "2022-01-12T18:00:00Z",
-   "recurringEndDate": null,
-   "enableOptimalBillingDate": true,
-   "metadata": {
-       "optimalBillingDateAnalysis": {
-           "basedNextBillingDate": "2022-01-15T18:00:00Z",
-           "optimalBillingDates": [
-               "2022-02-16T18:00:00Z",
-               "2222-02-17T18:00:00Z",
-               "2222-02-18T18:00:00Z"
-     ]
-       }
-   }
-}
-`,
-        title: 'PAYMENT INSTRUCTION IS GENERATED',
-      };
-
-      logs = updateCurlLogs(instructions, logs);
-      setCurl({ logs });
-
-      setCurrentStep(1);
-      // TODO scroll to
     }
   };
 
   const handleConfirmPayment = async () => {
-    // Steps:
-    // 1. Call api to confirm payment
-
-    let { logs } = curl;
-
     let currentState = {
       id: '2',
       response: '',
-      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/payments/ach' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
---header 'Content-Type: application/json' \
---data-raw '{
-"externalReferenceIdentifier": "north-wall-armory-invoice-1670877136",
-"customerUid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
-"merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599"
-}'`,
+      request: confirmPayment(
+        externalReferenceIdentifier,
+        customerUid,
+        merchantUid
+      ),
       title: 'Confirming payment...',
       isLoading: true,
     };
-    logs.push(currentState);
-    setCurl({ logs });
+    updateCurlLogs(currentState, curl.logs);
+
     // TODO move logic to api layer and remove simulated delay
-    await timeout(2000);
+
+    const confirmPaymentResponse = await apiRegistery
+      .paymentService()
+      .create(
+        new PaymentCreateArgs({ value: paymentUid }, PaymentMethodType.ACH),
+        token
+      );
+
     currentState = {
       ...currentState,
       isLoading: false,
-      response: `{
-      "uid": "834181ee-d39f-424c-950d-623876343885",
-      "createDate": "2022-12-12T20:39:35.067224Z",
-      "updateDate": "2022-12-12T20:39:37.742557719Z",
-      "status": "INITIATED",
-      "amount": 10.990000000000,
-      "paymentDate": "2022-01-17T18:00:00Z"
-      }
-      `,
+      response: confirmPaymentResponse.rawJson,
       title: 'RECURRING PAYMENT IS INITIATED',
     };
-    logs = updateCurlLogs(currentState, logs);
+    updateCurlLogs(currentState, curl.logs);
 
-    setCurl({ logs });
     setCurrentStep(2);
 
+    // Simulate what happens on the next monthly cycle
     await timeout(4000);
 
     const monitoringLog = {
@@ -356,54 +352,36 @@ const Demo = () => {
       title: 'BALANCE IS MONITORED FOR SUBSEQUENT PAYMENTS',
     };
 
-    logs.push(monitoringLog);
-    setCurl({ logs });
+    updateCurlLogs(monitoringLog, curl.logs);
 
     monitoringLog.request += '\n1/15 Balance insufficient. Payment on hold.';
-    logs = updateCurlLogs(monitoringLog, logs);
-    setCurl({ logs });
-    await timeout(1000);
+    updateCurlLogs(monitoringLog, curl.logs);
+    await timeout(timeoutDuration);
 
     monitoringLog.request += '\n1/16 Balance insufficient. Payment on hold.';
-    logs = updateCurlLogs(monitoringLog, logs);
-    setCurl({ logs });
-    await timeout(1000);
+    updateCurlLogs(monitoringLog, curl.logs);
+    await timeout(timeoutDuration);
 
     monitoringLog.request += '\n1/17 Balance sufficient.';
-    logs = updateCurlLogs(monitoringLog, logs);
-    setCurl({ logs });
-    await timeout(1000);
+    updateCurlLogs(monitoringLog, curl.logs);
+    await timeout(timeoutDuration);
 
     const paymentLog = {
       id: 'payment',
-      request: `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/payments/ach' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
---header 'Content-Type: application/json' \
---data-raw '{
- "externalReferenceIdentifier": "ancestry.com",
- "customerUid": "7aee19e1-b1ac-40e5-91e1-14eaefe73138",
- "merchantUid": "67f14ac8-74c3-428c-b577-bd999bc4a599"
-}'`,
+      request: confirmPayment(
+        externalReferenceIdentifier,
+        customerUid,
+        merchantUid
+      ),
       response: '',
       title:
         'PAYMENT IS AUTO GENERATED ON BILLING DATE WHEN BALANCE IS SUFFICIENT',
     };
-
-    logs.push(paymentLog);
-    setCurl({ logs });
-    await timeout(1000);
-
-    paymentLog.response = `{
-   "uid": "834181ee-d39f-424c-950d-623876343885",
-   "createDate": "2023-01-15T20:39:35.067224Z",
-   "updateDate": "2023-01-17T20:39:37.742557719Z",
-   "status": "INITIATED",
-   "amount": 29.990000000000,
-   "paymentDate": "2022-01-17T18:00:00Z"
-}`;
-    logs = updateCurlLogs(paymentLog, logs);
-    setCurl({ logs });
-    await timeout(1000);
+    updateCurlLogs(paymentLog, curl.logs);
+    await timeout(timeoutDuration);
+    paymentLog.response = confirmPaymentResponse.rawJson;
+    updateCurlLogs(paymentLog, curl.logs);
+    await timeout(timeoutDuration);
   };
 
   return (
@@ -411,78 +389,50 @@ const Demo = () => {
       <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
         <Grid item xs={12} md={6}>
           {openBankConnect ? (
-            <BankConnect>
-              {bankConnectScreen === 0 ? (
-                <Consent onClick={() => handleBankConnect()} />
-              ) : null}
-              {bankConnectScreen === 1 ? (
-                <BankSelect onClick={() => handleBankConnect()} />
-              ) : null}
-              {bankConnectScreen === 2 ? (
-                <BankLogin onClick={() => handleBankConnect()} />
-              ) : null}
-              {bankConnectScreen === 3 ? (
-                <AccountSelection onClick={() => handleBankConnect()} />
-              ) : null}
-              {bankConnectScreen === 4 ? (
-                <Success onClick={() => handleBankConnect()} />
-              ) : null}
-            </BankConnect>
+            <BankConnectWrapper
+              bankConnectScreen={bankConnectScreen}
+              handleBankConnect={handleBankConnect}
+              onSuccess={handleOnSuccess}
+            />
           ) : null}
           <Box sx={{ marginTop: '55px', marginBottom: '55px' }}>
             {currentStep === 0 ? (
-              <Panel>
-                <PanelHeader label="Subscriber" />
-                <Box sx={{ marginTop: '24px' }}>
-                  <Form>
-                    <FormRow
-                      label="First Name"
-                      defaultValue="John"
-                      type="text"
-                    />
-                    <FormRow
-                      label="Last Name"
-                      defaultValue="Snow"
-                      type="text"
-                    />
-                    <FormRow
-                      label="Email"
-                      type="email"
-                      defaultValue="johnsnow@northwall.com"
-                    />
-                  </Form>
-                </Box>
-                <Box sx={{ marginTop: '34px' }}>
-                  <PanelHeader label="Subscription Plan" />
-                </Box>
-                <Box sx={{ marginTop: '15px', textAlign: 'center' }}>
-                  <Select
-                    name="subscription"
-                    options={subscriptions}
-                    onSelect={(option) => handleSubscriptionSelect(option)}
-                  />
-                </Box>
-                <Box sx={{ marginTop: '37px', textAlign: 'center' }}>
-                  <Button
-                    backgroundColor="#172836"
-                    textColor="#fff"
-                    label="Pay by Bank"
-                    onClick={() => handlePayByBank()}
-                  />
-                </Box>
-              </Panel>
+              <SubscriptionPanel
+                firstName={firstName}
+                lastName={lastName}
+                email={email}
+                subscriptions={subscriptions}
+                onFirstNameChange={setFirstName}
+                onLastNameChange={setLastName}
+                onEmailChange={setEmail}
+                onSubscriptionChange={(o) => handleSubscriptionSelect(o)}
+                onPayByBankClick={handlePayByBank}
+                disabled={loading}
+              />
             ) : null}
             {currentStep === 1 ? (
               <Panel>
                 <PanelHeader label="Basic Checking (*8230)" />
-                <Box sx={{ typography: 'body1' }}>$29.99/mo</Box>
-                <Box sx={{ typography: 'body1' }}>Every 15th of the month</Box>
+                <Box sx={{ typography: 'body1' }}>
+                  ${subscriptions.find((s) => s.selected)?.value}/mo
+                </Box>
+                <Box sx={{ typography: 'body1' }}>
+                  Every{' '}
+                  {nextBillingDay ? (
+                    <span>
+                      {nextBillingDay.getDate()}
+                      {nthNumber(nextBillingDay.getDate())}
+                    </span>
+                  ) : null}{' '}
+                  the month
+                </Box>
                 <Box sx={{ marginTop: '47px', textAlign: 'center' }}>
                   <Button
                     backgroundColor="#172836"
                     textColor="#fff"
                     label="Confirm Payment"
                     onClick={() => handleConfirmPayment()}
+                    disabled={loading}
                   />
                 </Box>
               </Panel>

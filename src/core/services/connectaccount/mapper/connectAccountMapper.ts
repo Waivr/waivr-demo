@@ -14,17 +14,19 @@ import { FutureDate } from '../../../domain/common/date/FutureDate';
 const mapConnectAccountRender = (connectAccountRender: any): ConnectAccountRender => {
   const type:ConnectAccountLinkingAccountType = ConnectAccountLinkingAccountType[
       connectAccountRender.type as keyof typeof ConnectAccountLinkingAccountType
-      ];
-  const linkingAccessToken = new ConnectAccountLinkingAccessToken(connectAccountRender.linkingAccessToken);
-  const validUntil = FutureDate.basedOfNow(connectAccountRender.validUntil);
+    ];
+  const linkingAccessToken = new ConnectAccountLinkingAccessToken(
+    connectAccountRender.linkingAccessToken
+  );
+  const validUntil = FutureDate.basedOfNow(new Date(connectAccountRender.validUntil));
 
   const rawJson = JSON.stringify(connectAccountRender);
 
   return new ConnectAccountRender(
-      type,
-      linkingAccessToken,
-      validUntil,
-      rawJson
+    type,
+    linkingAccessToken,
+    validUntil,
+    rawJson
   );
 };
 
@@ -68,9 +70,9 @@ const toApiCreateRequest = (request: ConnectAccountCreateArgs): BConnectAccountC
 };
 
 const mapRenderRequest = (request: ConnectAccountRenderCreateArgs): BConnectAccountRenderCreateRequest => ({
-    merchantUid: request.merchantIdentifier.value,
-    redirectUrl: request.redirectUrl,
-  });
+  merchantUid: request.merchantIdentifier.value,
+  redirectUrl: request.redirectUrl,
+});
 
 const toApiRenderRequest = (request: ConnectAccountRenderCreateArgs): BConnectAccountRenderCreateRequest => {
   try {

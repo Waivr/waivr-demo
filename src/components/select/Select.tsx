@@ -9,6 +9,7 @@ export type Option = {
 type Props = {
   options: Array<Option>;
   name: string;
+  disabled: boolean;
   onSelect: (option: Option) => void;
 };
 
@@ -33,7 +34,7 @@ const styles = {
   },
   div: {
     display: 'inline-block',
-    ':not(:first-child)': {
+    ':not(:first-of-type)': {
       marginLeft: '40px',
     },
   },
@@ -41,12 +42,21 @@ const styles = {
 
 // TODO - handle select logic off clicking the label
 
-export const Select = ({ name, options = [], onSelect }: Props) => (
+export const Select = ({ name, options = [], disabled, onSelect }: Props) => (
   <Box sx={{ ...styles }}>
     {options.map((o: Option) => (
-      <Box key={o.value} onClick={() => onSelect(o)}>
-        <label className={o.selected ? 'selected' : ''}>{o.label}</label>
-        <input type="radio" name={name} value={o.value} checked={o.selected} />
+      <Box key={o.value} onClick={() => (!disabled ? onSelect(o) : undefined)}>
+        <label className={o.selected && !disabled ? 'selected' : ''}>
+          {o.label}
+        </label>
+        <input
+          type="radio"
+          name={name}
+          value={o.value}
+          checked={o.selected || false}
+          onChange={() => undefined}
+          disabled={disabled}
+        />
       </Box>
     ))}
   </Box>

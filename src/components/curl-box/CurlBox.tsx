@@ -70,7 +70,7 @@ const styles = {
       overflow: 'hidden',
       display: 'inline-block',
       verticalAlign: 'bottom',
-      '-webkit-animation': 'ellipsis steps(4,end) 1500ms infinite',
+      webkitAnimation: 'ellipsis steps(4,end) 1500ms infinite',
       animation: 'ellipsis steps(4,end) 1500ms infinite',
       // eslint-disable-next-line no-octal-escape
       content: '"\\2026"',
@@ -116,7 +116,7 @@ export const CurlBox = ({ logs, autoScroll }: Props) => {
   return (
     <Box sx={{ ...styles.wrapper }}>
       {logs.map((log) => (
-        <>
+        <Box key={log.id}>
           <Box sx={{ ...styles.title }} ref={ref}>
             {log.title}
           </Box>
@@ -133,7 +133,7 @@ export const CurlBox = ({ logs, autoScroll }: Props) => {
             ) : null}
             {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
           </Box>
-        </>
+        </Box>
       ))}
     </Box>
   );

@@ -23,7 +23,7 @@ import {
 const mapPaymentFrequency = (frequency: any): PaymentFrequency => {
   const cycle:PaymentFrequencyCycle = PaymentFrequencyCycle[
       frequency.cycle as keyof typeof PaymentFrequencyCycle
-      ];
+    ];
   const amount = new PositiveAmount(frequency.recurrence);
   return new PaymentFrequency(
       cycle,
@@ -36,34 +36,40 @@ const mapPaymentInstruction = (paymentInstruction: any): PaymentInstruction => {
   const createDate = new Date(RequiredAttributes.requireNonNull(paymentInstruction.createDate));
   const externalReferenceIdentifier = new PaymentInstructionExternalReferenceIdentifier(
       paymentInstruction.externalReferenceIdentifier
-  );
+    );
   const customerIdentifier = new CustomerIdentifier(paymentInstruction.customerUid);
   const merchantIdentifier = new MerchantIdentifier(paymentInstruction.merchantUid);
   const status:PaymentInstructionStatus = PaymentInstructionStatus[
       paymentInstruction.status as keyof typeof PaymentInstructionStatus
-      ];
+    ];
   const amount = new PositiveAmount(paymentInstruction.amount);
   const frequency = mapPaymentFrequency(paymentInstruction.frequency);
   const nextBillingDate = RequiredAttributes.requireNonNull(
-      DateUtils.buildFutureDate(createDate, paymentInstruction.nextBillingDate)
+    DateUtils.buildFutureDate(
+      createDate,
+      new Date(paymentInstruction.nextBillingDate)
+    )
   );
-  const recurringEndDate = DateUtils.buildFutureDate(createDate, paymentInstruction.recurringEndDate);
+  const recurringEndDate = DateUtils.buildFutureDate(
+    createDate,
+    paymentInstruction.recurringEndDate
+  );
 
   const rawJson = JSON.stringify(paymentInstruction);
 
   return new PaymentInstruction(
     identifier,
-      createDate,
+    createDate,
     new Date(RequiredAttributes.requireNonNull(paymentInstruction.updateDate)),
-      rawJson,
-      externalReferenceIdentifier,
-      customerIdentifier,
-      merchantIdentifier,
-      status,
-      amount,
-      frequency,
-      nextBillingDate,
-      recurringEndDate,
+    rawJson,
+    externalReferenceIdentifier,
+    customerIdentifier,
+    merchantIdentifier,
+    status,
+    amount,
+    frequency,
+    nextBillingDate,
+    recurringEndDate,
       paymentInstruction.enableOptimalBillingDate,
   );
 };
@@ -85,24 +91,24 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
   const identifier = new PaymentInstructionIdentifier(paymentInstructionSummary.uid);
   const externalReferenceIdentifier = new PaymentInstructionExternalReferenceIdentifier(
       paymentInstructionSummary.externalReferenceId
-  );
+    );
   const customerIdentifier = new CustomerIdentifier(paymentInstructionSummary.customerUid);
   const merchantIdentifier = new MerchantIdentifier(paymentInstructionSummary.merchantUid);
   const status:PaymentInstructionStatus = PaymentInstructionStatus[
       paymentInstructionSummary.status as keyof typeof PaymentInstructionStatus
-      ];
+    ];
   const amount = new PositiveAmount(paymentInstructionSummary.amount);
   const frequency = mapPaymentFrequency(paymentInstructionSummary.frequency);
 
   const now = new Date();
   const nextBillingDate = RequiredAttributes.requireNonNull(
-      DateUtils.buildFutureDate(now, paymentInstructionSummary.nextBillingDate)
+    DateUtils.buildFutureDate(now, paymentInstructionSummary.nextBillingDate)
   );
   const recurringEndDate = DateUtils.buildFutureDate(now, paymentInstructionSummary.recurringEndDate);
 
   const bankAccount = new PaymentInstructionBankAccountSummary(
-      paymentInstructionSummary.bankAccount.institutionName,
-      paymentInstructionSummary.bankAccount.maskedAccountNumber,
+    paymentInstructionSummary.bankAccount.institutionName,
+    paymentInstructionSummary.bankAccount.maskedAccountNumber,
       paymentInstructionSummary.bankAccount.maskedRoutingNumber,
   );
 
@@ -110,15 +116,15 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
 
   return new PaymentInstructionSummary(
     identifier,
-      externalReferenceIdentifier,
-      customerIdentifier,
-      merchantIdentifier,
-      status,
-      amount,
-      frequency,
-      nextBillingDate,
-      recurringEndDate,
-      bankAccount,
+    externalReferenceIdentifier,
+    customerIdentifier,
+    merchantIdentifier,
+    status,
+    amount,
+    frequency,
+    nextBillingDate,
+    recurringEndDate,
+    bankAccount,
       rawJson,
   );
 };
