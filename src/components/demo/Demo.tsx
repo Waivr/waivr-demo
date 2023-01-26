@@ -447,7 +447,7 @@ const Demo = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <CurlBox {...curl} autoScroll={!openBankConnect} />
+          <CurlBox {...curl} />
           <Box sx={{ textAlign: 'right', marginTop: '23px' }}>
             <Button
               backgroundColor="#E2FF62"
