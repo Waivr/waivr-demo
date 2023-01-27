@@ -4,7 +4,6 @@ import WaivrAppApiRegistry, {
   IWaivrAppApiRegistry,
 } from '../../core/services/registry/waivrapp/waivrAppApiRegistry';
 import EnvironmentVars from '../../core/config/EnvironmentVars';
-import { createMocks } from './mocks';
 
 const axiosMockInstance = axios.create();
 const axiosLiveInstance = axios.create({
@@ -21,10 +20,9 @@ export const axiosMockAdapterInstance: AxiosMockAdapter = new AxiosMockAdapter(
   }
 );
 
-export const createApiRegistery = (): IWaivrAppApiRegistry => {
-  if (EnvironmentVars.env === 'development') {
-    createMocks();
-    return WaivrAppApiRegistry.instance(axiosMockInstance);
-  }
-  return WaivrAppApiRegistry.instance(axiosLiveInstance);
-};
+export const createApiRegistery = (): IWaivrAppApiRegistry =>
+  // if (EnvironmentVars.env === 'development') {
+  //   createMocks();
+  //   return WaivrAppApiRegistry.instance(axiosMockInstance);
+  // }
+  WaivrAppApiRegistry.instance(axiosLiveInstance);

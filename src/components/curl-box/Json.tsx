@@ -24,7 +24,8 @@ const tryParseJson = (json: string): object | string => {
 };
 
 export const Json = ({ json, nested, level }: Props) => {
-  const parsed = tryParseJson(json);
+  const cleanedJson = json.replaceAll(/plaid/gi, 'DEMO');
+  const parsed = tryParseJson(cleanedJson);
 
   if (typeof parsed === 'string') {
     return (
