@@ -58,7 +58,7 @@ const styles = {
     },
   },
   response: {
-    color: '#7377E4',
+    color: '#73DFDA',
     pre: {
       whiteSpace: 'pre-wrap',
     },
