@@ -354,10 +354,10 @@ const Demo = () => {
     updateCurlLogs(monitoringLog, curl.logs);
 
     if (nextBillingDay != null) {
-      for (let i = -1; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
         const nextDate = new Date(nextBillingDay.valueOf());
         nextDate.setDate(nextBillingDay.getDate() + 30 + i);
-        if (i < 1) {
+        if (i < 2) {
           monitoringLog.request += `\n${
             nextDate.getMonth() + 1
           }/${nextDate.getDate()} Balance insufficient. Payment on hold.`;
