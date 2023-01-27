@@ -20,6 +20,20 @@ export const CurlLine = ({ curl }: Props) => {
   }
 
   const arr = [];
+
+  // These are lines that are simply text logs
+  if (lines.length === 1) {
+    return (
+      <>
+        {curl.split('\n').map((l) => (
+          <Box component="div" sx={{ ...styles.curlValue }}>
+            {l}
+          </Box>
+        ))}
+      </>
+    );
+  }
+
   for (let i = 0; i < lines.length; i++) {
     if (i % 2) {
       arr.push(
