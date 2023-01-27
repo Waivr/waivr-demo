@@ -8,41 +8,44 @@ import CustomerMapper from './mapper/customerMapper';
 import { HttpStatusCode } from '../api/httpType';
 
 const create = async (
-    api: AxiosInstance,
-    createArgs: CustomerCreateArgs,
-    token: ApiAccessToken,
+  api: AxiosInstance,
+  createArgs: CustomerCreateArgs,
+  token: ApiAccessToken
 ): Promise<Customer> => {
-    RequiredAttributes.requireNonNull(createArgs);
-    RequiredAttributes.requireNonNull(token);
+  RequiredAttributes.requireNonNull(createArgs);
+  RequiredAttributes.requireNonNull(token);
 
-    const request = CustomerMapper.toApiCreateRequest(createArgs);
+  const request = CustomerMapper.toApiCreateRequest(createArgs);
 
-    const header = ApiCaller.headerBuilder(token);
+  const header = ApiCaller.headerBuilder(token);
 
-    const callApi = () => api
-        .post(
-            '/v1/customers/',
-            JSON.stringify(request),
-            header
-        );
-    return ApiCaller.caller(callApi, CustomerMapper.fromObject, HttpStatusCode.CREATED);
+  const callApi = () =>
+    api.post('/v1/customers', JSON.stringify(request), header);
+  return ApiCaller.caller(
+    callApi,
+    CustomerMapper.fromObject,
+    HttpStatusCode.CREATED
+  );
 };
 
-
 export interface ICustomerService {
-    create: (createArgs: CustomerCreateArgs, token: ApiAccessToken) => (Promise<Customer>),
+  create: (
+    createArgs: CustomerCreateArgs,
+    token: ApiAccessToken
+  ) => Promise<Customer>;
 }
 
 const instance = (api: AxiosInstance): ICustomerService => {
-    RequiredAttributes.requireNonNull(api);
+  RequiredAttributes.requireNonNull(api);
 
-    return {
-        create: (createArgs: CustomerCreateArgs, token: ApiAccessToken) => create(api, createArgs, token),
-    };
+  return {
+    create: (createArgs: CustomerCreateArgs, token: ApiAccessToken) =>
+      create(api, createArgs, token),
+  };
 };
 
 const CustomerService = {
-    instance
+  instance,
 };
 
 export default CustomerService;

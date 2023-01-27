@@ -33,9 +33,11 @@ import { PaymentMethodType } from '../../core/domain/payment/paymentMethodType';
 import { BankConnectWrapper } from '../bank-connect/Wrapper';
 import { nthNumber, timeout } from '../utilities';
 
-const merchantUid = '67f14ac8-74c3-428c-b577-bd999bc4a599';
+// TODO get value from environment vars
+const merchantUid = '598bd015-1c25-4fbf-8c8b-05ef2b20ded1';
 const externalReferenceIdentifier = 'ancestry.com';
 const token = { ...EnvironmentVars.apiAccessToken };
+const authHeaderToken = `${token.key} ${token.secret}`;
 const timeoutDuration = 1000;
 const apiRegistery = createApiRegistery();
 
@@ -119,7 +121,13 @@ const Demo = () => {
     let currentState = {
       id: '0',
       response: '',
-      request: createCustomer(merchantUid, firstName, lastName, email),
+      request: createCustomer(
+        authHeaderToken,
+        merchantUid,
+        firstName,
+        lastName,
+        email
+      ),
       title: 'creating customer...',
       isLoading: true,
     };
@@ -151,7 +159,7 @@ const Demo = () => {
     let renderLog = {
       id: 'render',
       response: '',
-      request: connectAccountsRender(merchantUid),
+      request: connectAccountsRender(authHeaderToken, merchantUid),
       title: '[New title - connect accounts render]...',
       isLoading: true,
     };
@@ -190,6 +198,7 @@ const Demo = () => {
       id: '1',
       response: '',
       request: connectAccounts(
+        authHeaderToken,
         merchantUid,
         customerUid,
         institutionId,
@@ -200,20 +209,15 @@ const Demo = () => {
       isLoading: true,
     };
     updateCurlLogs(currentState, curl.logs);
-
-    await apiRegistery.connectAccountService().linkCustomerAccount(
-      new ConnectAccountCreateArgs(
-        { value: merchantUid },
-        { value: customerUid },
-        {
-          accountIdentifier: accountId,
-        },
-        {
-          value: bankToken,
-        }
-      ),
-      token
-    );
+    await apiRegistery
+      .connectAccountService()
+      .linkCustomerAccount(
+        ConnectAccountCreateArgs.asBypass(
+          { value: merchantUid },
+          { value: customerUid }
+        ),
+        token
+      );
 
     currentState = {
       ...currentState,
@@ -250,6 +254,7 @@ const Demo = () => {
     let instructions = {
       response: '',
       request: createPaymentInstructions(
+        authHeaderToken,
         externalReferenceIdentifier,
         customerUid,
         merchantUid,
@@ -262,9 +267,8 @@ const Demo = () => {
 
     updateCurlLogs(instructions, curl.logs);
 
-    // TODO better error handling for value here
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const amount = new PositiveAmount(parseInt(subscription!.value, 10));
+    const amount = new PositiveAmount(parseFloat(subscription!.value));
 
     const paymentInstructionsResponse = await apiRegistery
       .paymentInstructionService()
@@ -278,7 +282,10 @@ const Demo = () => {
             value: merchantUid,
           },
           amount,
-          { cycle: PaymentFrequencyCycle.MONTHLY, recurrence: amount },
+          {
+            cycle: PaymentFrequencyCycle.MONTHLY,
+            recurrence: new PositiveAmount(1),
+          },
           FutureDate.basedOfNow(
             DateUtils.addTimeUnit(new Date(), TimeUnit.MINUTE, 60)
           )
@@ -316,6 +323,7 @@ const Demo = () => {
       id: '2',
       response: '',
       request: confirmPayment(
+        authHeaderToken,
         externalReferenceIdentifier,
         customerUid,
         merchantUid
@@ -354,6 +362,8 @@ const Demo = () => {
 
     updateCurlLogs(monitoringLog, curl.logs);
 
+    let nextPaymentDate = new Date();
+
     if (nextBillingDay != null) {
       for (let i = 0; i < 3; i++) {
         const nextDate = new Date(nextBillingDay.valueOf());
@@ -366,6 +376,7 @@ const Demo = () => {
           monitoringLog.request += `\n${
             nextDate.getMonth() + 1
           }/${nextDate.getDate()} Balance sufficient.`;
+          nextPaymentDate = nextDate;
         }
         updateCurlLogs(monitoringLog, curl.logs);
         // eslint-disable-next-line no-await-in-loop
@@ -376,6 +387,7 @@ const Demo = () => {
     const paymentLog = {
       id: 'payment',
       request: confirmPayment(
+        token.key,
         externalReferenceIdentifier,
         customerUid,
         merchantUid
@@ -386,7 +398,13 @@ const Demo = () => {
     };
     updateCurlLogs(paymentLog, curl.logs);
     await timeout(timeoutDuration);
-    paymentLog.response = confirmPaymentResponse.rawJson;
+
+    const json = JSON.parse(confirmPaymentResponse.rawJson);
+    json.createDate = nextPaymentDate.toISOString();
+    json.updateDate = nextPaymentDate.toISOString();
+    json.paymentDate = nextPaymentDate.toISOString();
+
+    paymentLog.response = JSON.stringify(json);
     updateCurlLogs(paymentLog, curl.logs);
     await timeout(timeoutDuration);
   };

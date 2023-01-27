@@ -1,7 +1,7 @@
 import { axiosMockAdapterInstance } from './requests';
 
 export const mockResponses = {
-  '/v1/customers/': {
+  '/v1/customers': {
     uid: '7aee19e1-b1ac-40e5-91e1-14eaefe73138',
     createDate: '2022-12-12T19:57:44.438588476Z',
     updateDate: '2022-12-12T19:57:44.623806274Z',
@@ -15,7 +15,7 @@ export const mockResponses = {
     validUntil: '2030-01-01T01:00:00Z',
   },
   '/v1/connectaccounts/connect': {},
-  '/v1/paymentinstructions/': {
+  '/v1/paymentinstructions': {
     uid: '48548386-99fb-4de4-b8f6-513945c944e8',
     customerUid: '7aee19e1-b1ac-40e5-91e1-14eaefe73138',
     merchantUid: '67f14ac8-74c3-428c-b577-bd999bc4a599',
@@ -54,8 +54,8 @@ export const mockResponses = {
 
 export const createMocks = () => {
   axiosMockAdapterInstance
-    .onPost('/v1/customers/')
-    .reply(() => [201, mockResponses['/v1/customers/']]);
+    .onPost('/v1/customers')
+    .reply(() => [201, mockResponses['/v1/customers']]);
 
   axiosMockAdapterInstance
     .onPost('/v1/connectaccounts/render')
@@ -66,10 +66,10 @@ export const createMocks = () => {
     .reply(() => [201, mockResponses['/v1/connectaccounts/connect']]);
 
   axiosMockAdapterInstance
-    .onPost('/v1/paymentinstructions/')
-    .reply(() => [201, mockResponses['/v1/paymentinstructions/']]);
+    .onPost('/v1/paymentinstructions')
+    .reply(() => [201, mockResponses['/v1/paymentinstructions']]);
 
   axiosMockAdapterInstance
-    .onPost('/v1/payments/')
+    .onPost('/v1/payments')
     .reply(() => [201, mockResponses['/v1/payments']]);
 };

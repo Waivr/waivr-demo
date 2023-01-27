@@ -2,12 +2,13 @@
  * @returns curl template with single quotes replaced. These are then added back escaped in CurlLine component
  */
 export const createCustomer = (
+  token: string,
   merchantUid: string,
   email: string,
   firstName: string,
   lastName: string
 ) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/customers' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Authorization: ${token}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 "merchantUid": "${merchantUid}",
@@ -16,22 +17,24 @@ export const createCustomer = (
 "lastName": "${lastName.replaceAll("'", '&apos;')}"
 }'`;
 export const connectAccountsRender = (
+  token: string,
   merchantUid: string
 ) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/connectaccounts/render' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Authorization: ${token}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 "merchantUid": "${merchantUid}"
 }'`;
 
 export const connectAccounts = (
+  token: string,
   merchantUid: string,
   customerUid: string,
   institutionIdentifier: string,
   accountIdentifier: string,
   publicToken: string
 ) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/connectaccounts/connect' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Authorization: ${token}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
  "merchantUid": "${merchantUid}",
@@ -43,12 +46,13 @@ export const connectAccounts = (
  "publicToken": "${publicToken}"
 }'`;
 export const createPaymentInstructions = (
+  token: string,
   externalReferenceIdentifier: string,
   customerUid: string,
   merchantUid: string,
   amount: string
 ) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/paymentinstructions' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+--header 'Authorization: ${token}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
  "externalReferenceIdentifier" : "${externalReferenceIdentifier}",
@@ -61,13 +65,13 @@ export const createPaymentInstructions = (
  }
 }'`;
 
-// TODO update this to be the correct format
 export const confirmPayment = (
+  token: string,
   externalReferenceIdentifier: string,
   customerUid: string,
   merchantUid: string
-) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/payments/ach' \
---header 'Authorization: BT-EX-67f14ac8-74c3-428c-b577-bd999bc4a599 fz05JGPc1NHgR24fxqHZCBDhDLFHjVlUs6YvwwVFmLYyhiTFPL' \
+) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/payments' \
+--header 'Authorization: ${token}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 "externalReferenceIdentifier": "${externalReferenceIdentifier}",
