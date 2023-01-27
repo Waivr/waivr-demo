@@ -218,6 +218,7 @@ const Demo = () => {
       ...currentState,
       isLoading: false,
       title: 'BANK CONNECTION IS ESTABLISHED',
+      response: '[Success 201]',
     };
 
     updateCurlLogs(currentState, curl.logs);

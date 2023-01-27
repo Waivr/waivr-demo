@@ -94,7 +94,7 @@ const tryParseJson = (json: string): string => {
   try {
     result = JSON.stringify(JSON.parse(json), null, 2);
   } catch {
-    /* empty */
+    result = json;
   }
 
   return result;
