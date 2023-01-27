@@ -21,7 +21,7 @@ const styles = {
     backgroundColor: 'primary.dark',
     maxHeight: '430px',
     borderRadius: '20px',
-    padding: '30px',
+    padding: '10px 14px 30px 30px',
     fontFamily: 'Inconsolata',
     overflowY: 'scroll',
     scrollbarWidth: 'auto',
