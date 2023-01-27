@@ -12,7 +12,6 @@ export interface CurlLog {
 
 export type Props = {
   logs: Array<CurlLog>;
-  autoScroll?: boolean;
 };
 
 const styles = {
@@ -101,11 +100,11 @@ const tryParseJson = (json: string): string => {
   return result;
 };
 
-export const CurlBox = ({ logs, autoScroll }: Props) => {
+export const CurlBox = ({ logs }: Props) => {
   const ref = useRef<null | HTMLDivElement>(null);
 
   const scroll = () => {
-    if (ref?.current != null && autoScroll) {
+    if (ref?.current != null) {
       ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
