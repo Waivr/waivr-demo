@@ -7,7 +7,13 @@ import EnvironmentVars from '../../core/config/EnvironmentVars';
 import { createMocks } from './mocks';
 
 const axiosMockInstance = axios.create();
-const axiosLiveInstance = axios.create();
+const axiosLiveInstance = axios.create({
+  withCredentials: false,
+  baseURL: EnvironmentVars.waivrAppApi,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 export const axiosMockAdapterInstance: AxiosMockAdapter = new AxiosMockAdapter(
   axiosMockInstance,
   {

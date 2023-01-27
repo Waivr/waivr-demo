@@ -33,6 +33,15 @@ export const Json = ({ json, nested, level }: Props) => {
       </Box>
     );
   }
+
+  // Remove null properties
+  // eslint-disable-next-line no-restricted-syntax
+  for (const prop in parsed) {
+    if (parsed[prop as keyof object] === null) {
+      delete parsed[prop as keyof object];
+    }
+  }
+
   return (
     <>
       {Object.keys(parsed).map((key, index) => {

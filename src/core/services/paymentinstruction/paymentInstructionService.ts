@@ -22,7 +22,7 @@ const create = async (
 
     const callApi = () => api
         .post(
-            '/v1/paymentinstructions/',
+            '/v1/paymentinstructions',
             JSON.stringify(request),
             header
         );

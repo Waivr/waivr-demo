@@ -59,7 +59,7 @@ export const JsonLine = ({
         {!last ? ',' : null}
       </Box>
     ) : null}
-    {type === 'object' && value != null ? (
+    {type === 'object' ? (
       // Recurssion to add nested objects.
       // Exclude null values from being printed.
       <Box component="span" sx={{ ...styles.jsonNested }}>

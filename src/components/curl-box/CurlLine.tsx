@@ -26,7 +26,7 @@ export const CurlLine = ({ curl }: Props) => {
     return (
       <>
         {curl.split('\n').map((l) => (
-          <Box component="div" sx={{ ...styles.curlValue }}>
+          <Box key={l} component="div" sx={{ ...styles.curlValue }}>
             {l}
           </Box>
         ))}
@@ -37,13 +37,13 @@ export const CurlLine = ({ curl }: Props) => {
   for (let i = 0; i < lines.length; i++) {
     if (i % 2) {
       arr.push(
-        <Box component="span" sx={{ ...styles.curlValue }}>
+        <Box key={i} component="span" sx={{ ...styles.curlValue }}>
           '{lines[i].replaceAll('&apos;', "\\'")}'
         </Box>
       );
     } else {
       arr.push(
-        <Box component="span" sx={{ ...styles.curlText }}>
+        <Box key={i} component="span" sx={{ ...styles.curlText }}>
           {lines[i]}
         </Box>
       );
