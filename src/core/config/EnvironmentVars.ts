@@ -37,7 +37,7 @@ export interface EnvironmentVarsMap {
 
 const env: EnvType = RequiredAttributes.requireNonNullOrElse(
   import.meta.env.NODE_ENV,
-  'stage'
+  'development'
 ) as EnvType;
 
 const docker = (): Docker => {
