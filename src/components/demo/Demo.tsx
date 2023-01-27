@@ -324,8 +324,6 @@ const Demo = () => {
     };
     updateCurlLogs(currentState, curl.logs);
 
-    // TODO move logic to api layer and remove simulated delay
-
     const confirmPaymentResponse = await apiRegistery
       .paymentService()
       .create(
@@ -355,17 +353,24 @@ const Demo = () => {
 
     updateCurlLogs(monitoringLog, curl.logs);
 
-    monitoringLog.request += '\n1/15 Balance insufficient. Payment on hold.';
-    updateCurlLogs(monitoringLog, curl.logs);
-    await timeout(timeoutDuration);
-
-    monitoringLog.request += '\n1/16 Balance insufficient. Payment on hold.';
-    updateCurlLogs(monitoringLog, curl.logs);
-    await timeout(timeoutDuration);
-
-    monitoringLog.request += '\n1/17 Balance sufficient.';
-    updateCurlLogs(monitoringLog, curl.logs);
-    await timeout(timeoutDuration);
+    if (nextBillingDay != null) {
+      for (let i = -1; i < 2; i++) {
+        const nextDate = new Date(nextBillingDay.valueOf());
+        nextDate.setDate(nextBillingDay.getDate() + 30 + i);
+        if (i < 1) {
+          monitoringLog.request += `\n${
+            nextDate.getMonth() + 1
+          }/${nextDate.getDate()} Balance insufficient. Payment on hold.`;
+        } else {
+          monitoringLog.request += `\n${
+            nextDate.getMonth() + 1
+          }/${nextDate.getDate()} Balance sufficient.`;
+        }
+        updateCurlLogs(monitoringLog, curl.logs);
+        // eslint-disable-next-line no-await-in-loop
+        await timeout(timeoutDuration);
+      }
+    }
 
     const paymentLog = {
       id: 'payment',
