@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import { Button } from '../button/Button';
 import Lottie from 'lottie-react';
+import { Button } from '../button/Button';
 import faceIdAnimation from './assets/31873-face-id-scan.json';
 import BankOfWesterosLogo from './assets/bank-of-westeros.png';
 
@@ -51,7 +51,7 @@ const styles = {
     zIndex: 100,
     position: 'fixed',
     top: '200px',
-    left: '113px',
+    left: 'calc(50% - 65px)',
     border: 'solid 1px rgba(219,222,226, 1)',
     borderRadius: '15px',
     overflow: 'hidden',

@@ -12,6 +12,7 @@ export interface CurlLog {
 
 export type Props = {
   logs: Array<CurlLog>;
+  autoScroll?: boolean;
 };
 
 const styles = {
@@ -37,8 +38,9 @@ const styles = {
       borderRadius: '20px',
       border: '3px solid primary.dark',
     },
-    [AppTheme.breakpoints.down('md')]: {
+    [AppTheme.breakpoints.down('sm')]: {
       padding: '20px',
+      fontSize: '10px',
     },
   },
   title: {
@@ -99,11 +101,11 @@ const tryParseJson = (json: string): string => {
   return result;
 };
 
-export const CurlBox = ({ logs }: Props) => {
+export const CurlBox = ({ logs, autoScroll }: Props) => {
   const ref = useRef<null | HTMLDivElement>(null);
 
   const scroll = () => {
-    if (ref?.current != null) {
+    if (ref?.current != null && autoScroll) {
       ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };

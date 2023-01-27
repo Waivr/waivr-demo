@@ -5,7 +5,7 @@ type Props = { children: React.ReactNode };
 
 const styles = {
   wrapper: {
-    position: 'absolute',
+    position: 'fixed',
     top: '50%',
     left: '30%',
     transform: 'translate(-50%, -50%)',

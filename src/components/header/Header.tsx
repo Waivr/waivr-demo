@@ -10,6 +10,9 @@ type Props = {
 const styles = {
   display: 'flex',
   alignItems: 'center',
+  paddingTop: '15px',
+  width: '95%',
+  margin: 'auto',
   header: {
     marginLeft: '45px',
     width: '100%',

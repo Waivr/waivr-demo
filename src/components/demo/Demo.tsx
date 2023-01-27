@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { CustomerCreateArgs } from '../../core/domain/customer/customerCreateArgs';
@@ -31,6 +31,7 @@ import { PaymentCreateArgs } from '../../core/domain/payment/paymentCreateArgs';
 import { PaymentMethodType } from '../../core/domain/payment/paymentMethodType';
 import { BankConnectWrapper } from '../bank-connect/Wrapper';
 import { nthNumber, timeout } from '../utilities';
+import AppTheme from '../common/global/AppTheme';
 
 const merchantUid = '67f14ac8-74c3-428c-b577-bd999bc4a599';
 const externalReferenceIdentifier = 'ancestry.com';
@@ -62,6 +63,7 @@ const Demo = () => {
       },
     ],
   } as CurlProps);
+  const lessThanSmall = useMediaQuery(AppTheme.breakpoints.down('sm'));
 
   // API state
   const [customerUid, setCustomerUid] = React.useState('');
@@ -386,8 +388,12 @@ const Demo = () => {
 
   return (
     <DemoLayout>
-      <Grid container columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}>
-        <Grid item xs={12} md={6}>
+      <Grid
+        container
+        columnSpacing={{ xs: 1, sm: 1, md: 4, lg: 10 }}
+        justifyContent="center"
+      >
+        <Grid item xs={12} md={6} lg={4}>
           {openBankConnect ? (
             <BankConnectWrapper
               bankConnectScreen={bankConnectScreen}
@@ -446,8 +452,8 @@ const Demo = () => {
             ) : null}
           </Box>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <CurlBox {...curl} />
+        <Grid item xs={12} md={6} lg={4}>
+          <CurlBox {...curl} autoScroll={!lessThanSmall} />
           <Box sx={{ textAlign: 'right', marginTop: '23px' }}>
             <Button
               backgroundColor="#E2FF62"
