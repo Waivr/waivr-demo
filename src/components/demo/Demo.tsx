@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import EnvironmentVars from '../../core/config/EnvironmentVars';
 import { CustomerCreateArgs } from '../../core/domain/customer/customerCreateArgs';
 import { PersonName } from '../../core/domain/person/personName';
 import { FirstName } from '../../core/domain/person/firstName';
@@ -34,7 +35,7 @@ import { nthNumber, timeout } from '../utilities';
 
 const merchantUid = '67f14ac8-74c3-428c-b577-bd999bc4a599';
 const externalReferenceIdentifier = 'ancestry.com';
-const token = { key: '', secret: '' };
+const token = { ...EnvironmentVars.apiAccessToken };
 const timeoutDuration = 1000;
 const apiRegistery = createApiRegistery();
 
