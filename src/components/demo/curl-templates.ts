@@ -1,3 +1,6 @@
+/**
+ * @returns curl template with single quotes replaced. These are then added back escaped in CurlLine component
+ */
 export const createCustomer = (
   merchantUid: string,
   email: string,
@@ -8,12 +11,10 @@ export const createCustomer = (
 --header 'Content-Type: application/json' \
 --data-raw '{
 "merchantUid": "${merchantUid}",
-"email": "${email}",
-"firstName": "${firstName}",
-"lastName": "${lastName}",
-}
+"email": "${email.replaceAll("'", '&apos;')}",
+"firstName": "${firstName.replaceAll("'", '&apos;')}",
+"lastName": "${lastName.replaceAll("'", '&apos;')}"
 }'`;
-
 export const connectAccountsRender = (
   merchantUid: string
 ) => `curl --location --request POST 'https://stage.waivr.co/api/waivr-app/v1/connectaccounts/render' \
