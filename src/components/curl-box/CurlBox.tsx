@@ -1,6 +1,8 @@
 import { Box } from '@mui/system';
 import { useEffect, useRef } from 'react';
 import AppTheme from '../common/global/AppTheme';
+import { CurlLine } from './CurlLine';
+import { Json } from './Json';
 
 export interface CurlLog {
   id?: string;
@@ -44,7 +46,7 @@ const styles = {
   },
   title: {
     backgroundColor: 'background.default',
-    marginBottom: '20px',
+    margin: '20px 0',
     padding: '5px',
     textTransform: 'uppercase',
     fontWeight: '700',
@@ -89,17 +91,6 @@ const styles = {
   },
 };
 
-const tryParseJson = (json: string): string => {
-  let result = '';
-  try {
-    result = JSON.stringify(JSON.parse(json), null, 2);
-  } catch {
-    result = json;
-  }
-
-  return result;
-};
-
 export const CurlBox = ({ logs }: Props) => {
   const ref = useRef<null | HTMLDivElement>(null);
 
@@ -112,7 +103,6 @@ export const CurlBox = ({ logs }: Props) => {
   useEffect(() => {
     scroll();
   });
-
   return (
     <Box sx={{ ...styles.wrapper }}>
       {logs.map((log) => (
@@ -121,16 +111,10 @@ export const CurlBox = ({ logs }: Props) => {
             {log.title}
           </Box>
           <Box sx={{ ...styles.request }}>
-            <pre>{log.request}</pre>
+            <CurlLine curl={log.request ?? ''} />
           </Box>
           <Box sx={{ ...styles.response }}>
-            {log.response != null ? (
-              <pre>
-                {log.response != null
-                  ? tryParseJson(log.response)
-                  : log.response}
-              </pre>
-            ) : null}
+            {log.response != null ? <Json json={log.response} /> : null}
             {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
           </Box>
         </Box>
