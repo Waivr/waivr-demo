@@ -160,7 +160,7 @@ const Demo = () => {
       id: 'render',
       response: '',
       request: connectAccountsRender(authHeaderToken, merchantUid),
-      title: '[New title - connect accounts render]...',
+      title: 'Creating a render token...',
       isLoading: true,
     };
     updateCurlLogs(renderLog, curl.logs);
@@ -176,7 +176,7 @@ const Demo = () => {
       ...renderLog,
       isLoading: false,
       response: renderResponse.rawJson,
-      title: '[New title - connect accounts render done]...',
+      title: 'Render token created',
     };
     updateCurlLogs(renderLog, curl.logs);
 
