@@ -8,14 +8,18 @@ import PaymentInstructionService, {
     IPaymentInstructionService
 } from '../../paymentinstruction/paymentInstructionService';
 import PaymentService, { IPaymentService } from '../../payment/paymentService';
+import { IEnvironmentConstants } from '../../../config/constants';
 
-const api = () => axios.create({
+const api = (constants?: IEnvironmentConstants) => {
+    const baseURL = EnvironmentVars.getEnvVars(constants).waivrAppApi;
+    return axios.create({
         withCredentials: false,
-        baseURL: EnvironmentVars.waivrAppApi,
+        baseURL,
         headers: {
             'Content-Type': 'application/json'
         }
     });
+};
 
 const merchantService = (axiosInstance: AxiosInstance) => MerchantService.instance(axiosInstance);
 const customerService = (axiosInstance: AxiosInstance) => CustomerService.instance(axiosInstance);
@@ -40,10 +44,10 @@ const instance = (axiosInstance: AxiosInstance): IWaivrAppApiRegistry => ({
 });
 
 const WaivrAppApiRegistry = {
-    instance: (axiosInstance?: AxiosInstance) => {
+    instance: (axiosInstance?: AxiosInstance, constants?: IEnvironmentConstants) => {
         const apiInstance = RequiredAttributes.requireNonNullOrElse(
             axiosInstance,
-            api()
+            api(constants)
         );
         return instance(apiInstance);
 }

@@ -8,7 +8,7 @@ import AppTheme from './components/common/global/AppTheme';
 import AppRoutes from './components/routes/app.routes';
 
 const App = () => (
-  <BrowserRouter basename={EnvironmentVars.publicUrl}>
+  <BrowserRouter basename={EnvironmentVars.getEnvVars().publicUrl}>
     <ThemeProvider theme={AppTheme}>
       <CssBaseline />
       <AppGlobalStyles />

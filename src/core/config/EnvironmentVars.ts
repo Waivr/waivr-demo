@@ -1,5 +1,6 @@
 import RequiredAttributes from '../paramutils/requiredAttributes';
 import { ApiAccessToken } from '../domain/auth/apiAccessToken';
+import environmentConstants, { IEnvironmentConstants } from './constants';
 
 export interface LastDocker {
   id: string | null;
@@ -35,70 +36,69 @@ export interface EnvironmentVarsMap {
   apiAccessToken: ApiAccessToken;
 }
 
-const env: EnvType = RequiredAttributes.requireNonNullOrElse(
-  import.meta.env.NODE_ENV,
-  'development'
-) as EnvType;
+const env = (constants: IEnvironmentConstants): EnvType => RequiredAttributes.requireNonNullOrElse(
+      constants.ENVIRONMENT,
+      'development'
+  ) as EnvType;
 
-const docker = (): Docker => {
+const docker = (constants: IEnvironmentConstants): Docker => {
   const last: LastDocker = {
-    id: import.meta.env.LAST_DOCKER_ID || null,
-    tag: import.meta.env.LAST_DOCKER_TAG || null,
-    imageId: import.meta.env.LAST_DOCKER_IMAGE_ID || null,
+    id: constants.LAST_DOCKER_ID,
+    tag: constants.LAST_DOCKER_TAG,
+    imageId: constants.LAST_DOCKER_IMAGE_ID,
   };
   return {
-    tag: import.meta.env.DOCKER_TAG || null,
+    tag: constants.DOCKER_TAG,
     last,
   };
 };
 
-const git = (): Git => ({
-  tag: import.meta.env.GIT_TAG || null,
-  refName: import.meta.env.GITHUB_REF_NAME || null,
-  sha: import.meta.env.GITHUB_SHA || null,
+const git = (constants: IEnvironmentConstants): Git => ({
+  tag: constants.GIT_TAG,
+  refName: constants.GITHUB_REF_NAME,
+  sha: constants.GITHUB_SHA,
 });
 
-const service = (): Service => ({
-  name: import.meta.env.SERVICE_NAME || null,
-  appVersion: import.meta.env.GITHUB_REF_NAME || null,
-  description: import.meta.env.SERVICE_DESCRIPTION || null,
+const service = (constants: IEnvironmentConstants): Service => ({
+  name: constants.SERVICE_NAME,
+  appVersion: constants.GITHUB_REF_NAME,
+  description: constants.SERVICE_DESCRIPTION,
 });
 
-const deploySummary = (): DeploySummary => ({
-  docker: docker(),
-  git: git(),
-  service: service(),
+const deploySummary = (constants: IEnvironmentConstants): DeploySummary => ({
+  docker: docker(constants),
+  git: git(constants),
+  service: service(constants),
 });
 
-const apiAccessToken = (): ApiAccessToken => {
-  const key = RequiredAttributes.requireNonBlank(
-    import.meta.env.API_TOKEN_KEY || import.meta.env.VITE_PUBLIC_API_TOKEN_KEY
-  );
-  const secret = RequiredAttributes.requireNonBlank(
-    import.meta.env.API_TOKEN_SECRET ||
-      import.meta.env.VITE_PUBLIC_API_TOKEN_SECRET
-  );
+const apiAccessToken = (constants: IEnvironmentConstants): ApiAccessToken => {
+  const key = RequiredAttributes.requireNonBlank(constants.API_TOKEN_KEY);
+  const secret = RequiredAttributes.requireNonBlank(constants.API_TOKEN_SECRET);
   return new ApiAccessToken(key, secret);
 };
 
-const geEnvVars = (): EnvironmentVarsMap => {
+const buildEnvVars = (constants: IEnvironmentConstants): EnvironmentVarsMap => {
   const publicUrl = RequiredAttributes.requireNonBlankOrNonNullDefault(
-    import.meta.env.PUBLIC_URL,
+      constants.PUBLIC_URL,
     '/'
   );
   const waivrAppApi = RequiredAttributes.requireNonBlankOrNonNullDefault(
-    import.meta.env.WAIVR_APP_API || import.meta.env.VITE_PUBLIC_WAIVR_APP_API,
+      constants.WAIVR_APP_API,
     'api/waivr-service'
   );
   return {
-    env,
+    env: env(constants),
     publicUrl,
     waivrAppApi,
-    deploySummary: deploySummary(),
-    apiAccessToken: apiAccessToken(),
+    deploySummary: deploySummary(constants),
+    apiAccessToken: apiAccessToken(constants),
   };
 };
 
-const EnvironmentVars = geEnvVars();
+const getEnvVars = (constants?: IEnvironmentConstants): EnvironmentVarsMap => (constants ? buildEnvVars(constants) : buildEnvVars(environmentConstants));
+
+const EnvironmentVars = {
+  getEnvVars
+};
 
 export default EnvironmentVars;

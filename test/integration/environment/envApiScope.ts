@@ -1,21 +1,11 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
+import { Agent } from 'https';
 import WaivrAppApiRegistry, {
   IWaivrAppApiRegistry
 } from '../../../src/core/services/registry/waivrapp/waivrAppApiRegistry';
 import { ApiAccessToken } from '../../../src/core/domain/auth/apiAccessToken';
 import { MerchantIdentifier } from '../../../src/core/domain/merchant/merchantIdentifier';
-
-const waivrAppApi = (baseURL: string): AxiosInstance => axios.create({
-  withCredentials: false,
-  baseURL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-export interface EnvApiScope {
-  waivrAppApi: AxiosInstance,
-}
+import { IEnvironmentConstants } from '../../../src/core/config/constants';
 
 interface EnvApis {
   waivrAppApi: string,
@@ -43,18 +33,38 @@ const stageEnv: EnvApis = {
 
 
 export interface EnvApiRegistries {
-  waivrAppApiRegistry: IWaivrAppApiRegistry,
+  waivrAppApiRegistry :IWaivrAppApiRegistry
   merchantIdentifier: MerchantIdentifier
   apiToken: ApiAccessToken
 }
 
-const buildRegistries = (env: EnvApis): EnvApiRegistries => ({
-  waivrAppApiRegistry: WaivrAppApiRegistry.instance(
-      waivrAppApi(env.waivrAppApi)
-  ),
-  merchantIdentifier: new MerchantIdentifier(env.merchantUuid),
-  apiToken: env.apiToken
-});
+const buildRegistries = (env: EnvApis): EnvApiRegistries => {
+  const constants: IEnvironmentConstants = {
+    API_TOKEN_KEY: env.apiToken.key,
+    API_TOKEN_SECRET: env.apiToken.secret,
+    WAIVR_APP_API: env.waivrAppApi
+  };
+
+  const httpsAgent = new Agent({
+    rejectUnauthorized: false, // (NOTE: this will disable client verification)
+  });
+  const axiosInstance = axios.create({
+    withCredentials: false,
+    baseURL: env.waivrAppApi,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    httpsAgent
+  });
+  return {
+    waivrAppApiRegistry: WaivrAppApiRegistry.instance(
+        axiosInstance,
+        constants
+    ),
+    merchantIdentifier: new MerchantIdentifier(env.merchantUuid),
+    apiToken: env.apiToken
+  };
+};
 
 const EnvApiScopeEnd2End = {
   local: () => buildRegistries(localEnv),

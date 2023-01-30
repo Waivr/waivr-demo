@@ -21,11 +21,12 @@ import DateUtils, { TimeUnit } from '../../src/core/paramutils/dateUtils';
 import { PaymentCreateArgs } from '../../src/core/domain/payment/paymentCreateArgs';
 import { PaymentMethodType } from '../../src/core/domain/payment/paymentMethodType';
 
-describe.skip('Onboard Customer End2End', () => {
+
+describe('Onboard Customer End2End', () => {
     const envApiRegistries = EnvApiScopeEnd2End.stage();
     const { waivrAppApiRegistry, merchantIdentifier, apiToken } = envApiRegistries;
 
-    it.skip('onboardCustomer using a ByPass Bank connected via PLAID ', async () => {
+    it('onboardCustomer using a ByPass Bank connected via PLAID ', async () => {
         const customerService = waivrAppApiRegistry.customerService();
         const connectAccountService = waivrAppApiRegistry.connectAccountService();
         const paymentInstructionService = waivrAppApiRegistry.paymentInstructionService();
