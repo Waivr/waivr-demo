@@ -36,7 +36,7 @@ import { nthNumber, timeout } from '../utilities';
 // TODO get value from environment vars
 const merchantUid = '598bd015-1c25-4fbf-8c8b-05ef2b20ded1';
 const externalReferenceIdentifier = 'ancestry.com';
-const token = { ...EnvironmentVars.apiAccessToken };
+const token = { ...EnvironmentVars.getEnvVars().apiAccessToken };
 const authHeaderToken = `${token.key} ${token.secret}`;
 const timeoutDuration = 1000;
 const apiRegistery = createApiRegistery();

@@ -9,7 +9,7 @@ import StorageContentManager from './core/storage/storageContentManager';
 
 // eslint-disable-next-line no-console
 console.log('App started with Env Variables.', EnvironmentVars);
-StorageContentManager.setToken(EnvironmentVars.apiAccessToken);
+StorageContentManager.setToken(EnvironmentVars.getEnvVars().apiAccessToken);
 
 const rootNode = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 

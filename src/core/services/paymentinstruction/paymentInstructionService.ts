@@ -7,6 +7,7 @@ import { PaymentInstructionCreateArgs } from '../../domain/paymentinstruction/pa
 import PaymentInstructionMapper from './mapper/paymentInstructionMapper';
 import { PaymentInstruction } from '../../domain/paymentinstruction/paymentInstruction';
 import { PaymentInstructionIdentifier } from '../../domain/paymentinstruction/paymentInstructionIdentifier';
+import { PaymentInstructionSummary } from '../../domain/paymentinstruction/paymentInstructionSummary';
 
 const create = async (
     api: AxiosInstance,
@@ -33,7 +34,7 @@ const findSummary = async (
     api: AxiosInstance,
     paymentInstructionIdentifier: PaymentInstructionIdentifier,
     token: ApiAccessToken,
-): Promise<PaymentInstruction> => {
+): Promise<PaymentInstructionSummary> => {
     RequiredAttributes.requireNonNull(paymentInstructionIdentifier);
     RequiredAttributes.requireNonNull(token);
 
@@ -45,13 +46,13 @@ const findSummary = async (
             url,
             header
         );
-    return ApiCaller.caller(callApi, PaymentInstructionMapper.fromObject, HttpStatusCode.OK);
+    return ApiCaller.caller(callApi, PaymentInstructionMapper.fromSummaryObject, HttpStatusCode.OK);
 };
 
 
 export interface IPaymentInstructionService {
     create: (createArgs: PaymentInstructionCreateArgs, token: ApiAccessToken) => (Promise<PaymentInstruction>),
-    findSummary: (paymentInstructionIdentifier: PaymentInstructionIdentifier, token: ApiAccessToken) => (Promise<PaymentInstruction>),
+    findSummary: (paymentInstructionIdentifier: PaymentInstructionIdentifier, token: ApiAccessToken) => (Promise<PaymentInstructionSummary>),
 }
 
 const instance = (api: AxiosInstance): IPaymentInstructionService => {
