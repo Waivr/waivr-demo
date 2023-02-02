@@ -16,7 +16,7 @@ const mapPayment = (payment: any): Payment => {
       ];
   const amount = new PositiveAmount(payment.amount);
   const paymentDate = RequiredAttributes.requireNonNull(
-    DateUtils.buildFutureDate(createDate, new Date(payment.paymentDate))
+    DateUtils.buildFutureDateFromString(createDate, payment.paymentDate)
   );
 
   const rawJson = JSON.stringify(payment);

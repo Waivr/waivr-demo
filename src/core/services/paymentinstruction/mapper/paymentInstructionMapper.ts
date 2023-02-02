@@ -18,6 +18,8 @@ import { PaymentInstructionSummary } from '../../../domain/paymentinstruction/pa
 import {
     PaymentInstructionBankAccountSummary
 } from '../../../domain/paymentinstruction/paymentInstructionBankAccountSummary';
+import { PaymentInstructionMetadata } from '../../../domain/paymentinstruction/paymentInstructionMetadata';
+import { OptimalBillingDateAnalysis } from '../../../domain/paymentinstruction/optimalBillingDateAnalysis';
 
 const mapPaymentFrequency = (frequency: any): PaymentFrequency => {
     const cycle:PaymentFrequencyCycle = PaymentFrequencyCycle[
@@ -27,6 +29,18 @@ const mapPaymentFrequency = (frequency: any): PaymentFrequency => {
     return new PaymentFrequency(
         cycle,
         amount
+    );
+};
+
+const mapPaymentInstructionMetadata = (medatada: any): PaymentInstructionMetadata => {
+    const optimalBillingDates = medatada.optimalBillingDateAnalysis.optimalBillingDates
+        .map((optimalBillingDate: any) => new Date(optimalBillingDate));
+    const optimalBillingDateAnalysis = new OptimalBillingDateAnalysis(
+        new Date(medatada.optimalBillingDateAnalysis.basedNextBillingDate),
+        optimalBillingDates
+    );
+    return new PaymentInstructionMetadata(
+        optimalBillingDateAnalysis
     );
 };
 
@@ -44,15 +58,14 @@ const mapPaymentInstruction = (paymentInstruction: any): PaymentInstruction => {
     const amount = new PositiveAmount(paymentInstruction.amount);
     const frequency = mapPaymentFrequency(paymentInstruction.frequency);
     const nextBillingDate = RequiredAttributes.requireNonNull(
-        DateUtils.buildFutureDate(
-            createDate,
-            new Date(paymentInstruction.nextBillingDate)
-        )
+        DateUtils.buildFutureDateFromString(createDate, paymentInstruction.nextBillingDate)
     );
-    const recurringEndDate = DateUtils.buildFutureDate(
+    const recurringEndDate = DateUtils.buildFutureDateFromString(
         createDate,
         paymentInstruction.recurringEndDate
     );
+
+    const metadata = mapPaymentInstructionMetadata(paymentInstruction.metadata);
 
     const rawJson = JSON.stringify(paymentInstruction);
 
@@ -70,6 +83,7 @@ const mapPaymentInstruction = (paymentInstruction: any): PaymentInstruction => {
         nextBillingDate,
         recurringEndDate,
         paymentInstruction.enableOptimalBillingDate,
+        metadata
     );
 };
 
@@ -101,15 +115,17 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
 
     const now = new Date();
     const nextBillingDate = RequiredAttributes.requireNonNull(
-        DateUtils.buildFutureDate(now, paymentInstructionSummary.nextBillingDate)
+        DateUtils.buildFutureDateFromString(now, paymentInstructionSummary.nextBillingDate)
     );
-    const recurringEndDate = DateUtils.buildFutureDate(now, paymentInstructionSummary.recurringEndDate);
+    const recurringEndDate = DateUtils.buildFutureDateFromString(now, paymentInstructionSummary.recurringEndDate);
 
     const bankAccount = new PaymentInstructionBankAccountSummary(
         paymentInstructionSummary.bankAccount.institutionName,
         paymentInstructionSummary.bankAccount.maskedAccountNumber,
         paymentInstructionSummary.bankAccount.maskedRoutingNumber,
     );
+
+    const metadata = mapPaymentInstructionMetadata(paymentInstructionSummary.metadata);
 
     const rawJson = JSON.stringify(paymentInstructionSummary);
 
@@ -124,6 +140,7 @@ const mapPaymentInstructionSummary = (paymentInstructionSummary: any): PaymentIn
         nextBillingDate,
         recurringEndDate,
         bankAccount,
+        metadata,
         rawJson,
     );
 };
