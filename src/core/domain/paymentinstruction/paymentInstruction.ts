@@ -8,6 +8,7 @@ import { PositiveAmount } from '../common/numbers/positiveAmount';
 import { FutureDate } from '../common/date/FutureDate';
 import RequiredAttributes from '../../paramutils/requiredAttributes';
 import { PaymentFrequency } from './paymentFrequency';
+import { PaymentInstructionMetadata } from './paymentInstructionMetadata';
 
 export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
     externalReferenceIdentifier: PaymentInstructionExternalReferenceIdentifier;
@@ -28,6 +29,8 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
 
     enableOptimalBillingDate: boolean;
 
+    metadata: PaymentInstructionMetadata;
+
     constructor(
         identifier: PaymentInstructionIdentifier,
         createDate: Date,
@@ -41,7 +44,8 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
         frequency: PaymentFrequency,
         nextBillingDate: FutureDate,
         recurringEndDate: FutureDate | null,
-        enableOptimalBillingDate: boolean
+        enableOptimalBillingDate: boolean,
+        metadata: PaymentInstructionMetadata,
     ) {
         super(identifier, createDate, updateDate, rawJson);
         this.externalReferenceIdentifier = RequiredAttributes.requireNonNull(externalReferenceIdentifier);
@@ -53,5 +57,6 @@ export class PaymentInstruction extends IdObject<PaymentInstructionIdentifier> {
         this.nextBillingDate = RequiredAttributes.requireNonNull(nextBillingDate);
         this.recurringEndDate = recurringEndDate;
         this.enableOptimalBillingDate = RequiredAttributes.requireNonNull(enableOptimalBillingDate);
+        this.metadata = RequiredAttributes.requireNonNull(metadata);
     }
 }

@@ -9,6 +9,7 @@ import { FutureDate } from '../common/date/FutureDate';
 import RequiredAttributes from '../../paramutils/requiredAttributes';
 import { PaymentFrequency } from './paymentFrequency';
 import { PaymentInstructionBankAccountSummary } from './paymentInstructionBankAccountSummary';
+import { PaymentInstructionMetadata } from './paymentInstructionMetadata';
 
 export class PaymentInstructionSummary {
     identifier: PaymentInstructionIdentifier;
@@ -31,6 +32,8 @@ export class PaymentInstructionSummary {
 
     bankAccount: PaymentInstructionBankAccountSummary;
 
+    metadata: PaymentInstructionMetadata;
+
     rawJson: string;
 
     constructor(
@@ -44,6 +47,7 @@ export class PaymentInstructionSummary {
         nextBillingDate: FutureDate,
         recurringEndDate: FutureDate | null,
         bankAccount: PaymentInstructionBankAccountSummary,
+        metadata: PaymentInstructionMetadata,
         rawJson: string
     ) {
         this.identifier = RequiredAttributes.requireNonNull(identifier);
@@ -56,6 +60,7 @@ export class PaymentInstructionSummary {
         this.nextBillingDate = RequiredAttributes.requireNonNull(nextBillingDate);
         this.recurringEndDate = recurringEndDate;
         this.bankAccount = RequiredAttributes.requireNonNull(bankAccount);
+        this.metadata = RequiredAttributes.requireNonNull(metadata);
         this.rawJson = RequiredAttributes.requireNonBlank(rawJson);
     }
 }

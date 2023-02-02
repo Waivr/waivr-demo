@@ -23,7 +23,7 @@ import { PaymentMethodType } from '../../src/core/domain/payment/paymentMethodTy
 
 
 describe('Onboard Customer End2End', () => {
-    const envApiRegistries = EnvApiScopeEnd2End.stage();
+    const envApiRegistries = EnvApiScopeEnd2End.local();
     const { waivrAppApiRegistry, merchantIdentifier, apiToken } = envApiRegistries;
 
     it('onboardCustomer using a ByPass Bank connected via PLAID ', async () => {
@@ -78,6 +78,11 @@ describe('Onboard Customer End2End', () => {
         );
         const payment = await paymentService.create(paymentCreateArgs, apiToken);
         expect(payment).not.toBeNull();
+
+
+        // Gets fresh summary for payment instruction to be paid
+        const paymentInstructionSummaryAfterPayment = await paymentInstructionService.findSummary(paymentInstruction.identifier, apiToken);
+        expect(paymentInstructionSummaryAfterPayment).not.toBeNull();
     });
 
     it.skip('onboardCustomer using a Bank connected via PLAID ', async () => {

@@ -63,11 +63,19 @@ const buildFutureDate = (baseDate: Date, date: Date | null): FutureDate | null =
   return new FutureDate(dayBefore, date);
 };
 
+const buildFutureDateFromString = (baseDate: Date, date: string | null): FutureDate | null => {
+  if (date === null) {
+    return null;
+  }
+  return buildFutureDate(baseDate, new Date(date));
+};
+
 const DateUtils = {
   isFutureDate,
   isAfterDate,
 
   buildFutureDate,
+  buildFutureDateFromString,
   addTimeUnit,
 
   requireFutureDate,

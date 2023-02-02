@@ -16,7 +16,7 @@ import {
   connectAccounts,
   connectAccountsRender,
   createCustomer,
-  createPaymentInstructions,
+  createPaymentInstructions, findPaymentInstructionSummary,
 } from './curl-templates';
 import DemoLayout from './layout/DemoLayout';
 import { createApiRegistery } from './requests';
@@ -32,6 +32,7 @@ import { PaymentCreateArgs } from '../../core/domain/payment/paymentCreateArgs';
 import { PaymentMethodType } from '../../core/domain/payment/paymentMethodType';
 import { BankConnectWrapper } from '../bank-connect/Wrapper';
 import { nthNumber, timeout } from '../utilities';
+import { PaymentInstructionIdentifier } from '../../core/domain/paymentinstruction/paymentInstructionIdentifier';
 
 // TODO get value from environment vars
 const merchantUid = '598bd015-1c25-4fbf-8c8b-05ef2b20ded1';
@@ -251,14 +252,15 @@ const Demo = () => {
 
     const subscription = subscriptions.find((s) => s.selected === true);
 
+
     let instructions = {
       response: '',
       request: createPaymentInstructions(
-        authHeaderToken,
-        externalReferenceIdentifier,
-        customerUid,
-        merchantUid,
-        subscription?.value ?? ''
+          authHeaderToken,
+          externalReferenceIdentifier,
+          customerUid,
+          merchantUid,
+          subscription?.value ?? ''
       ),
       title: 'Payment instructions generating...',
       isLoading: true,
@@ -271,27 +273,27 @@ const Demo = () => {
     const amount = new PositiveAmount(parseFloat(subscription!.value));
 
     const paymentInstructionsResponse = await apiRegistery
-      .paymentInstructionService()
-      .create(
-        new PaymentInstructionCreateArgs(
-          { value: externalReferenceIdentifier },
-          {
-            value: customerUid,
-          },
-          {
-            value: merchantUid,
-          },
-          amount,
-          {
-            cycle: PaymentFrequencyCycle.MONTHLY,
-            recurrence: new PositiveAmount(1),
-          },
-          FutureDate.basedOfNow(
-            DateUtils.addTimeUnit(new Date(), TimeUnit.MINUTE, 60)
-          )
-        ),
-        token
-      );
+        .paymentInstructionService()
+        .create(
+            new PaymentInstructionCreateArgs(
+                { value: externalReferenceIdentifier },
+                {
+                  value: customerUid,
+                },
+                {
+                  value: merchantUid,
+                },
+                amount,
+                {
+                  cycle: PaymentFrequencyCycle.MONTHLY,
+                  recurrence: new PositiveAmount(1),
+                },
+                FutureDate.basedOfNow(
+                    DateUtils.addTimeUnit(new Date(), TimeUnit.MINUTE, 60)
+                )
+            ),
+            token
+        );
 
     setPaymentUid(paymentInstructionsResponse.identifier.value);
 
@@ -347,6 +349,25 @@ const Demo = () => {
       title: 'RECURRING PAYMENT IS INITIATED',
     };
     updateCurlLogs(currentState, curl.logs);
+
+
+    const paymentInstructionSummary = await apiRegistery
+        .paymentInstructionService()
+        .findSummary(new PaymentInstructionIdentifier(paymentUid), token);
+
+    const paymentInstructionSummaryAfterPayment = {
+      response: paymentInstructionSummary.rawJson,
+      request: findPaymentInstructionSummary(
+          authHeaderToken,
+          paymentUid,
+      ),
+      title: 'PAYMENT INSTRUCTION IS ACTIVATED',
+      isLoading: false,
+      id: 'instructionActivated',
+    };
+
+    updateCurlLogs(paymentInstructionSummaryAfterPayment, curl.logs);
+
 
     setCurrentStep(2);
 
