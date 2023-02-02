@@ -1,5 +1,5 @@
 import { Navigate, Route } from 'react-router-dom';
-import NotFound from '../../core/genericpages/NotFound';
+import NotFound from '../genericpages/NotFound';
 
 const GenericRoutes = (
     <>

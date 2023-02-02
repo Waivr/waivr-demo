@@ -32,6 +32,7 @@ import { PaymentCreateArgs } from '../../core/domain/payment/paymentCreateArgs';
 import { PaymentMethodType } from '../../core/domain/payment/paymentMethodType';
 import { BankConnectWrapper } from '../bank-connect/Wrapper';
 import { nthNumber, timeout } from '../utilities';
+import { PaymentInstructionIdentifier } from '../../core/domain/paymentinstruction/paymentInstructionIdentifier';
 
 // TODO get value from environment vars
 const merchantUid = '598bd015-1c25-4fbf-8c8b-05ef2b20ded1';
@@ -251,7 +252,7 @@ const Demo = () => {
 
     const subscription = subscriptions.find((s) => s.selected === true);
 
-    let instructions = {
+    const paymentInstructionBeforePayment = {
       response: '',
       request: createPaymentInstructions(
         authHeaderToken,
@@ -265,7 +266,8 @@ const Demo = () => {
       id: 'instructions',
     };
 
-    updateCurlLogs(instructions, curl.logs);
+
+    updateCurlLogs(paymentInstructionBeforePayment, curl.logs);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const amount = new PositiveAmount(parseFloat(subscription!.value));
@@ -295,15 +297,21 @@ const Demo = () => {
 
     setPaymentUid(paymentInstructionsResponse.identifier.value);
 
-    instructions = {
-      ...instructions,
+
+    const paymentInstructionSummary = await apiRegistery
+        .paymentInstructionService()
+        .findSummary(paymentInstructionsResponse.identifier, token);
+
+    const paymentInstructionSummaryAfterCreation = {
+      ...paymentInstructionBeforePayment,
+      ...paymentInstructionSummary,
       isLoading: false,
-      response: paymentInstructionsResponse.rawJson,
+      response: paymentInstructionSummary.rawJson,
       title: 'PAYMENT INSTRUCTION IS GENERATED',
     };
 
-    setNextBillingDay(paymentInstructionsResponse.nextBillingDate.value);
-    updateCurlLogs(instructions, curl.logs);
+    setNextBillingDay(paymentInstructionSummaryAfterCreation.nextBillingDate.value);
+    updateCurlLogs(paymentInstructionSummaryAfterCreation, curl.logs);
 
     setLoading(false);
   };
@@ -347,6 +355,28 @@ const Demo = () => {
       title: 'RECURRING PAYMENT IS INITIATED',
     };
     updateCurlLogs(currentState, curl.logs);
+
+
+    const paymentInstructionSummary = await apiRegistery
+        .paymentInstructionService()
+        .findSummary(new PaymentInstructionIdentifier(paymentUid), token);
+
+    const paymentInstructionSummaryAfterPayment = {
+      response: paymentInstructionSummary.rawJson,
+      request: createPaymentInstructions(
+          authHeaderToken,
+          externalReferenceIdentifier,
+          customerUid,
+          merchantUid,
+          `${paymentInstructionSummary.amount.value}`
+      ),
+      title: 'PAYMENT INSTRUCTION IS ACTIVATED',
+      isLoading: false,
+      id: 'instructionActivated',
+    };
+
+    updateCurlLogs(paymentInstructionSummaryAfterPayment, curl.logs);
+
 
     setCurrentStep(2);
 
