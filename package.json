@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "author": "Wavir",
+  "author": "Waivr",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

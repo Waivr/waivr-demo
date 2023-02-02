@@ -15,10 +15,10 @@ interface EnvApis {
 
 const localEnv: EnvApis = ({
   waivrAppApi: 'http://localhost:8785/api/waivr-app',
-  merchantUuid: '',
+  merchantUuid: '636dd5e6-9cc5-435e-86da-6cb0622eab68',
   apiToken: {
-    key: '',
-    secret: ''
+    key: 'BT-EX-636dd5e6-9cc5-435e-86da-6cb0622eab68',
+    secret: 'dyGDxMNwUjIFyKvQDoaFGy5pC9NOJ1BGQtTAVlRnSGKVjL472y'
   }
 });
 
