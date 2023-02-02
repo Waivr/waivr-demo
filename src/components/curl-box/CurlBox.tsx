@@ -17,11 +17,20 @@ export type Props = {
 };
 
 const styles = {
-  wrapper: {
+  innerCurl: {
+    paddingRight: '20px',
+  },
+  container: {
     backgroundColor: 'primary.dark',
-    maxHeight: '430px',
+    maxHeight: '450px',
     borderRadius: '20px',
     padding: '10px 14px 30px 30px',
+  },
+  wrapper: {
+    maxHeight: '430px',
+    // backgroundColor: 'primary.dark',
+    // borderRadius: '20px',
+    // padding: '10px 14px 30px 30px',
     fontFamily: 'Inconsolata',
     overflowY: 'scroll',
     scrollbarWidth: 'auto',
@@ -104,21 +113,23 @@ export const CurlBox = ({ logs }: Props) => {
     scroll();
   });
   return (
-    <Box sx={{ ...styles.wrapper }}>
-      {logs.map((log) => (
-        <Box key={log.id}>
-          <Box sx={{ ...styles.title }} ref={ref}>
-            {log.title}
+    <Box sx={{ ...styles.container }}>
+      <Box sx={{ ...styles.wrapper }}>
+        {logs.map((log) => (
+          <Box key={log.id} sx={{ ...styles.innerCurl }}>
+            <Box sx={{ ...styles.title }} ref={ref}>
+              {log.title}
+            </Box>
+            <Box sx={{ ...styles.request }}>
+              <CurlLine curl={log.request ?? ''} />
+            </Box>
+            <Box sx={{ ...styles.response }}>
+              {log.response != null ? <Json json={log.response} /> : null}
+              {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
+            </Box>
           </Box>
-          <Box sx={{ ...styles.request }}>
-            <CurlLine curl={log.request ?? ''} />
-          </Box>
-          <Box sx={{ ...styles.response }}>
-            {log.response != null ? <Json json={log.response} /> : null}
-            {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
-          </Box>
-        </Box>
-      ))}
+        ))}
+      </Box>
     </Box>
   );
 };

@@ -64,6 +64,13 @@ export const createPaymentInstructions = (
    "cycle" : "MONTHLY"
  }
 }'`;
+export const findPaymentInstructionSummary = (
+  token: string,
+  paymentInstructionUid: string,
+) => `curl --location --request GET 'https://stage.waivr.co/api/waivr-app/v1/paymentinstructions/${paymentInstructionUid}/summary' \
+--header 'Authorization: ${token}' \
+--header 'Content-Type: application/json' \
+--data-raw ''`;
 
 export const confirmPayment = (
   token: string,
