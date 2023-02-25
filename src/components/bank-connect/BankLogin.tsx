@@ -49,7 +49,7 @@ const styles = {
   },
   faceId: {
     zIndex: 100,
-    position: 'fixed',
+    position: 'absolute',
     top: '200px',
     left: 'calc(50% - 65px)',
     border: 'solid 1px rgba(219,222,226, 1)',
@@ -92,6 +92,9 @@ export const BankLogin = ({ onClick }: Props) => {
           <img src={BankOfWesterosLogo} alt="bank of westeros" />
         </Box>
       </Box>
+      <Box sx={{ ...styles.faceId }}>
+        <Lottie animationData={faceIdAnimation} />
+      </Box>
       <Box sx={{ ...styles.form }}>
         <TextField
           disabled
@@ -118,9 +121,6 @@ export const BankLogin = ({ onClick }: Props) => {
             Forgot username or password?
           </Box>
         </Box>
-      </Box>
-      <Box sx={{ ...styles.faceId }}>
-        <Lottie animationData={faceIdAnimation} />
       </Box>
       <Box sx={{ ...styles.register }}>
         <hr />

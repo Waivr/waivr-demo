@@ -4,26 +4,37 @@ import AppTheme from '../common/global/AppTheme';
 type Props = { children: React.ReactNode };
 
 const styles = {
-  wrapper: {
-    position: 'fixed',
-    top: '50%',
-    left: '30%',
-    transform: 'translate(-50%, -50%)',
-    width: '360px',
+  inner: {
+    width: '320px',
     height: '608px',
-    bgcolor: 'background.paper',
+    margin: 'auto',
     boxShadow: 24,
+    bgcolor: 'background.paper',
+    [AppTheme.breakpoints.between('xs', 'sm')]: {
+      width: '100vw',
+      height: '100vh',
+    },
+    [AppTheme.breakpoints.up('md')]: {
+      marginTop: '20px',
+    },
+  },
+  wrapper: {
+    position: 'absolute',
+    width: '100%',
+    height: '700px',
     zIndex: 10,
     overflowY: 'scroll',
     scrollbarWidth: 'none',
-    ' -ms-overflow-style': 'none',
+    '-ms-overflow-style': 'none',
     '::-webkit-scrollbar': {
       display: 'none',
     },
-    [AppTheme.breakpoints.down('md')]: {
+    [AppTheme.breakpoints.between('xs', 'sm')]: {
+      position: 'fixed',
       width: '100vw',
       height: '100vh',
-      left: '50%',
+      top: 0,
+      left: 0,
     },
   },
   shadow: {
@@ -37,8 +48,7 @@ const styles = {
 };
 
 export const BankConnect = ({ children }: Props) => (
-  <>
-    {/* <Box sx={{ ...styles.shadow }} /> */}
-    <Box sx={{ ...styles.wrapper }}>{children}</Box>
-  </>
+  <Box sx={{ ...styles.wrapper }}>
+    <Box sx={{ ...styles.inner }}>{children}</Box>
+  </Box>
 );

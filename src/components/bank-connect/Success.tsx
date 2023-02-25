@@ -8,6 +8,8 @@ type Props = {
 
 const styles = {
   padding: '168px 40px 15px 40px',
+  position: 'relative',
+  height: '100%',
   header: {
     fontSize: '26px',
     lineHeight: '30px',
