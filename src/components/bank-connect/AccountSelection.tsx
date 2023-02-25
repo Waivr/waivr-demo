@@ -13,6 +13,8 @@ type Props = {
 
 const styles = {
   padding: '64px 40px 15px 40px',
+  position: 'relative',
+  height: '100%',
   header: {
     fontSize: '19px',
     lineHeight: '20px',

@@ -1,3 +1,4 @@
+import { Box } from '@mui/system';
 import { AccountSelection } from './AccountSelection';
 import { BankConnect } from './BankConnect';
 import { BankLogin } from './BankLogin';
@@ -20,26 +21,28 @@ export const BankConnectWrapper = ({
   onSuccess,
   handleBankConnect,
 }: Props) => (
-  <BankConnect>
-    {bankConnectScreen === 0 ? (
-      <Consent onClick={() => handleBankConnect()} />
-    ) : null}
-    {bankConnectScreen === 1 ? (
-      <BankSelect onClick={() => handleBankConnect()} />
-    ) : null}
-    {bankConnectScreen === 2 ? (
-      <BankLogin onClick={() => handleBankConnect()} />
-    ) : null}
-    {bankConnectScreen === 3 ? (
-      <AccountSelection
-        onClick={() => {
-          onSuccess(accountId, institutionId, token);
-          handleBankConnect();
-        }}
-      />
-    ) : null}
-    {bankConnectScreen === 4 ? (
-      <Success onClick={() => handleBankConnect()} />
-    ) : null}
-  </BankConnect>
+  <Box sx={{ position: 'relative' }}>
+    <BankConnect>
+      {bankConnectScreen === 0 ? (
+        <Consent onClick={() => handleBankConnect()} />
+      ) : null}
+      {bankConnectScreen === 1 ? (
+        <BankSelect onClick={() => handleBankConnect()} />
+      ) : null}
+      {bankConnectScreen === 2 ? (
+        <BankLogin onClick={() => handleBankConnect()} />
+      ) : null}
+      {bankConnectScreen === 3 ? (
+        <AccountSelection
+          onClick={() => {
+            onSuccess(accountId, institutionId, token);
+            handleBankConnect();
+          }}
+        />
+      ) : null}
+      {bankConnectScreen === 4 ? (
+        <Success onClick={() => handleBankConnect()} />
+      ) : null}
+    </BankConnect>
+  </Box>
 );
