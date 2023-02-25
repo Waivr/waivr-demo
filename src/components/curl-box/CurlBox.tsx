@@ -19,29 +19,33 @@ export type Props = {
 const styles = {
   wrapper: {
     backgroundColor: 'primary.dark',
-    maxHeight: '430px',
     borderRadius: '20px',
-    padding: '10px 14px 30px 30px',
+    padding: '10px 4px 30px 30px',
     fontFamily: 'Inconsolata',
+    [AppTheme.breakpoints.down('sm')]: {
+      padding: '20px',
+      fontSize: '10px',
+    },
+  },
+  content: {
+    paddingRight: '10px',
+    maxHeight: '430px',
     overflowY: 'scroll',
     scrollbarWidth: 'auto',
     scrollbarColor: '#5E6870 primary.dark',
     '::-webkit-scrollbar': {
-      width: '16px',
+      width: '10px',
     },
     '::-webkit-scrollbar-track': {
       background: 'primary.dark',
-      borderTopRightRadius: '20px',
-      borderBottomRightRadius: '20px',
+      borderTopRightRadius: '10px',
+      borderBottomRightRadius: '10px',
     },
     '::-webkit-scrollbar-thumb': {
+      backgroundClip: 'padding-box',
       backgroundColor: '#5E6870',
-      borderRadius: '20px',
+      borderRadius: '10px',
       border: '3px solid primary.dark',
-    },
-    [AppTheme.breakpoints.down('sm')]: {
-      padding: '20px',
-      fontSize: '10px',
     },
   },
   title: {
@@ -105,20 +109,22 @@ export const CurlBox = ({ logs }: Props) => {
   });
   return (
     <Box sx={{ ...styles.wrapper }}>
-      {logs.map((log) => (
-        <Box key={log.id}>
-          <Box sx={{ ...styles.title }} ref={ref}>
-            {log.title}
+      <Box sx={{ ...styles.content }}>
+        {logs.map((log) => (
+          <Box key={log.id}>
+            <Box sx={{ ...styles.title }} ref={ref}>
+              {log.title}
+            </Box>
+            <Box sx={{ ...styles.request }}>
+              <CurlLine curl={log.request ?? ''} />
+            </Box>
+            <Box sx={{ ...styles.response }}>
+              {log.response != null ? <Json json={log.response} /> : null}
+              {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
+            </Box>
           </Box>
-          <Box sx={{ ...styles.request }}>
-            <CurlLine curl={log.request ?? ''} />
-          </Box>
-          <Box sx={{ ...styles.response }}>
-            {log.response != null ? <Json json={log.response} /> : null}
-            {log.isLoading ? <Box sx={{ ...styles.loading }} /> : null}
-          </Box>
-        </Box>
-      ))}
+        ))}
+      </Box>
     </Box>
   );
 };
