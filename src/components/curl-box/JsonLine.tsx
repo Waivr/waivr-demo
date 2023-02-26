@@ -24,10 +24,10 @@ const styles = {
     marginLeft: '10px',
   },
   jsonStringValue: {
-    color: '#FC71DD',
+    color: '#629CFF',
   },
   jsonNumberValue: {
-    color: '#629CFF',
+    color: '#FC71DD',
   },
 };
 
